@@ -111,3 +111,5 @@ __Run the install scripts.__
 * "Eye candy" + personal preference setup, also with wallpapers, etc.
 * More git config: line endings, anything else?
 * SSH keys and such: generate and help with using them during setup...
+* Write a `wpa_passphrase` wrapper that doesn't include plain text passwd, can set priority,
+  hidden networks, and can add a line below and above (thus can be >>'d to the conf file)
