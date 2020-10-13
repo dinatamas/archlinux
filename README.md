@@ -9,14 +9,14 @@ Linux environment. Thanks to John Hammond for inspiring this repo!
 
 ## Usage
 
-__Preparatory steps:__
+__Preparatory steps__
 1. Please read through the official Arch Linux Installation Guide!
 1. Download the Arch Linux image and prepare the installation medium.
 1. Disable Secure Boot from the BIOS.
 1. Boot into the live install image's virtual console.
 1. Connect to the internet, using Wi-fi, Ethernet, USB tethering, etc.
 
-__Run the install scripts.__
+__Run the install scripts__
 1. `wget https://github.com/dinatamas/archlinux/tarball/master`
 1. `tar xvf master`
 1. `chmod +x ./install1.sh`
