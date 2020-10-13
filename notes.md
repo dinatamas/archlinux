@@ -8,3 +8,8 @@
 - print more visible delims? e.g. three lines of ####?
 - remember where last execution left off and try redoing from there?
 - more cleanup for abrupt stops!
+- wifi ping not working
+- y/N to y/n
+- /mnt/efi already created?
+- maybe force wiping of signatures... or some sort of formatting.
+- consider checking/collecting the optional dependencies of packages!
