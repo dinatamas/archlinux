@@ -1,6 +1,7 @@
 #!/bin/bash
 
 COLOR_RED=$(tput setaf 1)
+COLOR_YELLOW=$(tput setaf 3)
 BOLD=$(tput bold)
 COLOR_RESET=$(tput sgr0)
 
@@ -32,10 +33,6 @@ function parse_args() {
 function ask_proceed() {
     while true; do
         read -p "Proceed? [y/N] " reply
-        if [[ -z "$reply" ]]; then
-            echo "Exiting..."
-            exit 0
-        fi
         case $reply in
             [Yy]*)
                 break
@@ -67,10 +64,6 @@ ask_proceed_quiet
 ping archlinux.org -c 3 &>/dev/null
 if [ $? -ne 0 ]; then
     echo "${COLOR_RED}Error: No network connectivity!${COLOR_RESET}"
-    echo "Current network configuration:"
-    indent 'networkctl'
-    echo
-    indent 'ip link'
     exit 1
 fi
 
@@ -80,30 +73,20 @@ echo "Loading Hungarian keyboard layout..."
 ask_proceed_quiet
 loadkeys hu
 
-# TODO: setfont from /usr/share/kbd/consolefonts
-
 echo "-----"
 
 echo "Verifying that the system was booted in UEFI mode..."
 ask_proceed_quiet
 ls /sys/firmware/efi/efivars &>/dev/null
 if [ $? -ne 0 ]; then
-    echo "${COLOR_RED}Warning: The system wasn't booted in UEFI mode!${COLOR_RESET}";
+    echo "${COLOR_YELLOW}Warning: The system wasn't booted in UEFI mode!${COLOR_RESET}";
     ask_proceed
 fi
 
 echo "-----"
 
-echo "Updating the system clock to use network time data..."
-ask_proceed_quiet
-timedatectl set-ntp true
-echo "New time and date configuration:"
-indent 'timedatectl status'
-ask_proceed_quiet
-
-echo "-----"
-
 echo "Old disk layout on /dev/sda:"
+ask_proceed_quiet
 indent 'fdisk -l /dev/sda'
 echo
 indent 'lsblk -o "NAME,PATH,SIZE,TYPE,FSTYPE,MOUNTPOINT"'
@@ -115,8 +98,8 @@ echo "Backing up current partition layout..."
 ask_proceed_quiet
 sfdisk --dump /dev/sda > sda.dump
 echo "The contents of ./sda.dump:"
-ask_proceed_quiet
 indent 'cat sda.dump'
+ask_proceed_quiet
 
 echo "-----"
 
@@ -145,8 +128,6 @@ mkfs.fat -F32 /dev/sda1
 mkswap /dev/sda2
 mkfs.ext4 /dev/sda3
 
-echo "-----"
-
 echo "Mounting new filesystems..."
 ask_proceed_quiet
 mkdir /mnt/efi
@@ -157,6 +138,7 @@ mount /dev/sda3 /mnt
 echo "-----"
 
 echo "New disk layout on /dev/sda:"
+ask_proceed_quiet
 indent 'fdisk -l /dev/sda'
 echo
 indent 'lsblk -o "NAME,PATH,SIZE,TYPE,FSTYPE,MOUNTPOINT"'
@@ -168,31 +150,29 @@ echo "Generating new mirror file..."
 ask_proceed_quiet
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 echo "Original mirrorfile backed up to /etc/pacman.d/mirrorlist.bak"
-curl "https://www.archlinux.org/mirrorlist/?country=HU&protocol=https&ip_version=4&use_mirror_status=on" > /etc/pacman.d/mirrorlist 2>/dev/null
-sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist
-echo "The new mirrors:"
-indent "cat /etc/pacman.d/mirrorlist"
-ask_proceed_quiet
+curl "https://www.archlinux.org/mirrorlist/?country=HU&protocol=https&ip_version=4&use_mirror_status=on" > ./mirrorlist 2>/dev/null
+echo "This mirror file will be applied:"
+sed -i 's/#Server/Server/g' ./mirrorlist
+indent "cat ./mirrorlist"
+ask_proceed
+cp ./mirrorlist /etc/pacman.d/mirrorlist
 
 echo "-----"
 
 echo "Installing essential packages..."
 echo "The following packages will be installed:"
-packagelist="7z base base-devel cron curl dhcpcd diff efibootmgr ftp git grub htop intel-ucode jo jq less linux linux-firmware man-db man-pages mc openssh openssl rsync scp sudo texinfo tmux vi vim wget wpa_supplicant zip"
-# fdisk dhclient dhcping iw iwd network-manager firefox terminator transmission transmission-cli
-# codecs? nvidia-drivers?  hwinfo neofetch lshw tex pandoc sftp security? pwn? nvim neovim?
-# python3.8 desktop-environment i3 docker vlc spotify todoist vscode/atom/sublime calendar? bitwarden
-# nano GNU-binutils? moreutils [another shell? zsh, fish, ...]
-# polkit? udev mlocate
-# pulseaudio pavucontrol
-# xorg-xinit xorg-server xorg-xrandr
-# i3 gnu-free-fonts
-# terminator
-# dmenu
-# polybar? yay?
+packagelist="base base-devel bzip2 cronie curl dhcpcd diff efibootmgr fdisk ftp git grub gzip htop hwinfo intel-ucode jo jq less linux linux-firmware lshw man-db man-pages mc nano neofetch openssh openssl p7zip rsync scp sudo texinfo tmux transmission-cli uzip vi vim wget wpa_supplicant zip"
 echo $packagelist
 ask_proceed
 pacstrap /mnt $packagelist # &>/dev/null
+
+# Alternative networking packages: dhclient dhcping iw iwd network-manager
+# Devices and multimedia: alsa-utils pavucontrol pciutils pulseaudio usbutils
+# GUI basics: gnu-free-fonts i3 xorg-server xorg-xinit xorg-xrandr
+# GUI applications: bitwarden, calendar, firefox, spotify, terminator, todoist, vlc, vscode
+# GNU stuff: gdm gnome-control-center gnome-session
+# Developer stuff: docker, python3.8
+# Misc/unknown: dmenu mlocate polkit polybar udev yay
 
 echo "-----"
 
@@ -201,19 +181,18 @@ ask_proceed_quiet
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "Here is the new fstab file:"
 cat /mnt/etc/fstab
+ask_proceed_quiet
 
 echo "-----"
 
 echo "Copying over resource and environment files..."
 ask_proceed_quiet
-cp ./vimrc /mnt/vimrc
-cp ./bashrc /mnt/bashrc
+cp ./* /mnt/archlinux/
 
 echo "-----"
 
-echo "Performing install2.sh in chroot..."
+echo "Executing install2.sh in chroot..."
 ask_proceed
-cp ./install2.sh /mnt/install2.sh
 arch-chroot /mnt /bin/bash -c "chmod +x install2.sh && ./install2.sh"
 
 echo "-----"
