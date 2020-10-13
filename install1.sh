@@ -64,7 +64,7 @@ parse_args "$@"
 
 echo "Verifying that the computer has network connectivity..."
 ask_proceed_quiet
-ping archlinux.org -c 1 &>/dev/null
+ping archlinux.org -c 3 &>/dev/null
 if [ $? -ne 0 ]; then
     echo "${COLOR_RED}Error: No network connectivity!${COLOR_RESET}"
     echo "Current network configuration:"
@@ -122,7 +122,9 @@ echo "-----"
 
 echo "Creating new partition layout..."
 ask_proceed_quiet
-# sfdisk --wipe /dev/sda4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709
+echo "The current partition layout will be wiped"
+ask_proceed
+sfdisk --wipe /dev/sda
 read -r -d '' sfdisk_script << EOM
 label: gpt
 /dev/sda1 : size=500MiB type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B
@@ -133,24 +135,24 @@ echo "sfdisk script:"
 indent "echo \"$sfdisk_script\""
 echo "The above sfdisk script will be applied"
 ask_proceed
-# sfdisk /dev/sda << sfdisk_script
+sfdisk /dev/sda < $sfdisk_script
 
 echo "-----"
 
 echo "Creating new filesystems..."
 ask_proceed_quiet
-# mkfs.fat -F32 /dev/sda1
-# mkswap /dev/sda2
-# mkfs.ext4 /dev/sda3
+mkfs.fat -F32 /dev/sda1
+mkswap /dev/sda2
+mkfs.ext4 /dev/sda3
 
 echo "-----"
 
 echo "Mounting new filesystems..."
 ask_proceed_quiet
-# mkdir /mnt/efi
-# mount /dev/sda1 /mnt/efi
-# swapon /dev/sda2
-# mount /dev/sda3 /mnt
+mkdir /mnt/efi
+mount /dev/sda1 /mnt/efi
+swapon /dev/sda2
+mount /dev/sda3 /mnt
 
 echo "-----"
 
@@ -190,13 +192,13 @@ packagelist="7z base base-devel cron curl dhcpcd diff efibootmgr ftp git grub ht
 # polybar? yay?
 echo $packagelist
 ask_proceed
-# pacstrap /mnt $packagelist # &>/dev/null
+pacstrap /mnt $packagelist # &>/dev/null
 
 echo "-----"
 
 echo "Generating fstab file..."
 ask_proceed_quiet
-# genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -U /mnt >> /mnt/etc/fstab
 echo "Here is the new fstab file:"
 cat /mnt/etc/fstab
 
@@ -204,15 +206,15 @@ echo "-----"
 
 echo "Copying over resource and environment files..."
 ask_proceed_quiet
-# cp ./vimrc /mnt/vimrc
-# cp ./bashrc /mnt/bashrc
+cp ./vimrc /mnt/vimrc
+cp ./bashrc /mnt/bashrc
 
 echo "-----"
 
 echo "Performing install2.sh in chroot..."
 ask_proceed
-# cp ./install2.sh /mnt/install2.sh
-# arch-chroot /mnt /bin/bash -c "chmod +x install2.sh && ./install2.sh"
+cp ./install2.sh /mnt/install2.sh
+arch-chroot /mnt /bin/bash -c "chmod +x install2.sh && ./install2.sh"
 
 echo "-----"
 

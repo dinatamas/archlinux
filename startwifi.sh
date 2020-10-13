@@ -21,7 +21,7 @@ echo "Current ip link status of wlo1:"
 
 # Turn wifi on
 networkctl up wlo1
-sleep 2
+sleep 1
 
 # Show wifi driver kernel messages
 dmesg | grep "rtw_8822be" | grep -v -e "Modules linked in"
@@ -38,7 +38,7 @@ dhcpcd
 sleep 4
 
 # Verify connectivity
-ping -c 1 archlinux.org
+ping -c 3 archlinux.org
 
 # Note: to add a new wifi network, edit the configuration file
 # /etc/wpa_supplicant/wpa_supplicant.conf, by adding new networks
