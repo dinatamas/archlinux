@@ -1,0 +1,10 @@
+- loadkeys hu
+- pacman -Sy git
+- use git instead
+- cd into repo
+- echo the script into sfdisk
+- wiping happens automatically, simply warn about it!
+- all commands' input-output should be indented...
+- print more visible delims? e.g. three lines of ####?
+- remember where last execution left off and try redoing from there?
+- more cleanup for abrupt stops!

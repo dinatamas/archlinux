@@ -1,2 +1,6 @@
 # VIM stuff
 *.swp
+
+# Script files
+mirrorlist
+sda.dump

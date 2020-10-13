@@ -104,7 +104,6 @@ ask_proceed_quiet
 echo "-----"
 
 echo "Creating new partition layout..."
-ask_proceed_quiet
 echo "The current partition layout will be wiped"
 ask_proceed
 sfdisk --wipe /dev/sda
@@ -118,7 +117,7 @@ echo "sfdisk script:"
 indent "echo \"$sfdisk_script\""
 echo "The above sfdisk script will be applied"
 ask_proceed
-sfdisk /dev/sda < $sfdisk_script
+echo "$sfdisk_script" | sfdisk /dev/sda
 
 echo "-----"
 
@@ -161,7 +160,7 @@ echo "-----"
 
 echo "Installing essential packages..."
 echo "The following packages will be installed:"
-packagelist="base base-devel bzip2 cronie curl dhcpcd diff efibootmgr fdisk ftp git grub gzip htop hwinfo intel-ucode jo jq less linux linux-firmware lshw man-db man-pages mc nano neofetch openssh openssl p7zip rsync scp sudo texinfo tmux transmission-cli uzip vi vim wget wpa_supplicant zip"
+packagelist="base base-devel bzip2 cronie curl dhcpcd diffutils efibootmgr git grub gzip htop hwinfo intel-ucode less linux linux-firmware lshw man-db man-pages mc nano neofetch openssh openssl p7zip rsync sudo texinfo tmux transmission-cli unzip util-linux vi vim wget wpa_supplicant zip"
 echo $packagelist
 ask_proceed
 pacstrap /mnt $packagelist # &>/dev/null
@@ -171,7 +170,7 @@ pacstrap /mnt $packagelist # &>/dev/null
 # GUI basics: gnu-free-fonts i3 xorg-server xorg-xinit xorg-xrandr
 # GUI applications: bitwarden, calendar, firefox, spotify, terminator, todoist, vlc, vscode
 # GNU stuff: gdm gnome-control-center gnome-session
-# Developer stuff: docker, python3.8
+# Developer stuff: docker, jo, jq python3.8
 # Misc/unknown: dmenu mlocate polkit polybar udev yay
 
 echo "-----"
@@ -187,16 +186,11 @@ echo "-----"
 
 echo "Copying over resource and environment files..."
 ask_proceed_quiet
-cp ./* /mnt/archlinux/
-
-echo "-----"
-
-echo "Executing install2.sh in chroot..."
-ask_proceed
-arch-chroot /mnt /bin/bash -c "chmod +x install2.sh && ./install2.sh"
+mkdir /mnt/archlinux
+cp -r ./* /mnt/archlinux/
 
 echo "-----"
 
 echo "Done!"
-echo "Please reboot"
+echo "Please arch-chroot into /mnt and execute archlinux/install2.sh, exit chroot and then reboot."
 ask_proceed_quiet
