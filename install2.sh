@@ -56,7 +56,7 @@ ask_proceed_quiet
 hwclock --systohc
 
 echo "New time and date configuration:"
-indent 'timedatectl status'
+indent 'timedatectl status'  # FIXME: still displays wrong status. Maybe exec bash -c...?
 ask_proceed_quiet
 
 echo "-----"
@@ -78,6 +78,7 @@ echo "Setting localhost IP adresses..."
 ask_proceed_quiet
 # TODO: An extra newline here?
 echo "dinatamas-laptop" > /etc/hostname
+echo "" >> /etc/hosts
 echo "127.0.0.1    localhost" >> /etc/hosts
 echo "::1          localhost" >> /etc/hosts
 echo "127.0.1.1    dinatamas-laptop.localdomain dinatamas-laptop" >> /etc/hosts
@@ -103,7 +104,7 @@ echo "-----"
 
 echo "Copying over network configuration..."
 ask_proceed
-cp ./*.network /etc/systemd/network/
+cp ./networks/*.network /etc/systemd/network/
 
 echo "-----"
 
@@ -135,8 +136,8 @@ passwd
 
 echo "Copying configuration files..."
 ask_proceed
-cp ./archlinux/vimrc /home/dinatamas/.vimrc
-cp ./archlinux/bashrc /home/dinatamas/.bashrc
+cp ./vimrc /home/dinatamas/.vimrc
+cp ./bashrc /home/dinatamas/.bashrc
 rm -rf archlinux/ 
 chown -R dinatamas:dinatamas /home/dinatamas
 
@@ -151,9 +152,6 @@ echo "-----"
 
 echo "Done!"
 ask_proceed_quiet
-umount /mnt/efi
-umount /mnt
-#TODO: Use fuser to check mount point usage
 exit
 
 echo

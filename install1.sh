@@ -191,6 +191,18 @@ cp -r ./* /mnt/archlinux/
 
 echo "-----"
 
+echo "Executing install2.sh in chroot..."
+ask_proceed
+arch-chroot /mnt /bin/bash -c "cd archlinux && chmod +x install2.sh && ./install2.sh"
+# TODO: Very important - see if this is equivalent to running the commands themselves!
+
+echo "-----"
+
+echo "Unmounting /mnt to check for errors..."
+umount /mnt/efi
+umount /mnt
+# TODO: Use fuser to check mount point usage
+
 echo "Done!"
-echo "Please arch-chroot into /mnt and execute archlinux/install2.sh, exit chroot and then reboot."
+echo "Please reboot."
 ask_proceed_quiet
