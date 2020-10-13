@@ -66,7 +66,7 @@ ask_proceed_quiet
 sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
 sed -i 's/#hu_HU.UTF-8 UTF-8/hu_HU.UTF-8 UTF-8/g' /etc/locale.gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
-echo "KEYMAP=hu" > /etc/vconsole.font
+echo "KEYMAP=hu" > /etc/vconsole.conf
 
 echo "-----"
 
