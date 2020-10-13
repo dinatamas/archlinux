@@ -199,8 +199,8 @@ arch-chroot /mnt /bin/bash -c "cd archlinux && chmod +x install2.sh && ./install
 echo "-----"
 
 echo "Unmounting /mnt to check for errors..."
-umount /mnt
 umount /mnt/efi
+umount /mnt
 swapoff /dev/sda2
 # TODO: Use fuser to check mount point usage
 
