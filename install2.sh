@@ -118,6 +118,8 @@ echo "-----"
 
 echo "Installing the GRUB boot loader..."
 ask_proceed_quiet
+mkdir /efi
+mount /dev/sda1 /efi
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 echo "Enabling Intel CPU microcode early loading..."
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -126,23 +128,23 @@ echo "-----"
 
 # TODO: Review the following (John Hammond)
 echo "Creating a new user called dinatamas..."
-ask_proceed
+ask_proceed_quiet
 mkdir /home/dinatamas
 useradd dinatamas
 
 echo "Setting the password for dinatamas..."
-ask_proceed
+ask_proceed_quiet
 passwd
 
 echo "Copying configuration files..."
-ask_proceed
+ask_proceed_quiet
 cp ./vimrc /home/dinatamas/.vimrc
 cp ./bashrc /home/dinatamas/.bashrc
 rm -rf archlinux/ 
 chown -R dinatamas:dinatamas /home/dinatamas
 
 echo "Configuring sudo..."
-ask_proceed
+ask_proceed_quiet
 groupadd sudo
 usermod -aG sudo dinatamas
 sed -i 's/# %sudo/%sudo/g' /etc/sudoers

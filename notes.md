@@ -13,3 +13,4 @@
 - /mnt/efi already created?
 - maybe force wiping of signatures... or some sort of formatting.
 - consider checking/collecting the optional dependencies of packages!
+- /efi needs to be created from chroot and mounted again... why?
