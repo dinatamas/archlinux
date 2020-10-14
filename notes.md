@@ -15,3 +15,4 @@
 - consider checking/collecting the optional dependencies of packages!
 - /efi needs to be created from chroot and mounted again... why?
 - copy networks scripts, etc. to home? maybe just copy the whole thing to home?
+- full system upgrade upon first start?
