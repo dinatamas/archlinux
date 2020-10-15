@@ -32,7 +32,7 @@ function parse_args() {
 
 function ask_proceed() {
     while true; do
-        read -p "Proceed? [y/N] " reply
+        read -p "Proceed? [y/n] " reply
         case $reply in
             [Yy]*)
                 break
@@ -105,8 +105,8 @@ echo "-----"
 
 echo "Creating new partition layout..."
 echo "The current partition layout will be wiped"
-ask_proceed
-sfdisk --wipe /dev/sda
+ask_proceed_quiet
+# TODO: Force the wiping of signatures?
 read -r -d '' sfdisk_script << EOM
 label: gpt
 /dev/sda1 : size=500MiB type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B
@@ -149,9 +149,9 @@ echo "Generating new mirror file..."
 ask_proceed_quiet
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 echo "Original mirrorfile backed up to /etc/pacman.d/mirrorlist.bak"
-curl "https://www.archlinux.org/mirrorlist/?country=HU&protocol=https&ip_version=4&use_mirror_status=on" > ./mirrorlist 2>/dev/null
-echo "This mirror file will be applied:"
+curl "https://www.archlinux.org/mirrorlist/?country=HU&protocol=https&ip_version=4&use_mirror_status=on" > ./mirrorlist &>/dev/null
 sed -i 's/#Server/Server/g' ./mirrorlist
+echo "This mirror file will be applied:"
 indent "cat ./mirrorlist"
 ask_proceed
 cp ./mirrorlist /etc/pacman.d/mirrorlist
@@ -160,17 +160,33 @@ echo "-----"
 
 echo "Installing essential packages..."
 echo "The following packages will be installed:"
-packagelist="base base-devel bzip2 cronie curl dhcpcd diffutils efibootmgr git grub gzip htop hwinfo intel-ucode less linux linux-firmware lshw man-db man-pages mc nano neofetch openssh openssl p7zip rsync sudo texinfo tmux transmission-cli unzip util-linux vi vim wget wpa_supplicant zip"
-echo $packagelist
+# TODO: Allow the selection of packages?
+base="base base-devel efibootmgr git grub intel-ucode linux linux-firmware"
+indent "echo \"Base packages that are required for a minimal installation: ${base}\""
+helpgetting="man-db man-pages texinfo"
+indent "echo \"Packages to help getting help:                              ${helpgetting}\""
+networking="dhcpcd wpa_supplicant"
+indent "echo \"Packages required for networking:                           ${networking}\""
+coreutils="cronie curl diffutils less nano openssh openssl rsync sudo util-linux vi vim wget"
+indent "echo \"The most basic utilities:                                   ${coreutils}\""
+archiving="bzip2 gzip p7zip unzip zip"
+indent "echo \"Archiving, compressing, extracting:                         ${archiving}\""
+system="htop hwinfo lshw mc neofetch"
+indent "echo \"Tools for system management:                                ${system}\""
+extended="tmux transmission-cli"
+indent "echo \"Extended utilities:                                         ${extended}\""
 ask_proceed
 pacstrap /mnt $packagelist # &>/dev/null
 
-# Alternative networking packages: dhclient dhcping iw iwd network-manager
+# Things to be added to the above list:
+# Developer stuff: docker, jo, jq, python3.8
 # Devices and multimedia: alsa-utils pavucontrol pciutils pulseaudio usbutils
 # GUI basics: gnu-free-fonts i3 xorg-server xorg-xinit xorg-xrandr
 # GUI applications: bitwarden, calendar, firefox, spotify, terminator, todoist, vlc, vscode
+
+# Things that are here just to remember them:
+# Alternative networking packages: dhclient dhcping iw iwd network-manager
 # GNU stuff: gdm gnome-control-center gnome-session
-# Developer stuff: docker, jo, jq python3.8
 # Misc/unknown: dmenu mlocate polkit polybar udev yay
 
 echo "-----"
@@ -179,7 +195,7 @@ echo "Generating fstab file..."
 ask_proceed_quiet
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "Here is the new fstab file:"
-cat /mnt/etc/fstab
+indent "cat /mnt/etc/fstab"
 ask_proceed_quiet
 
 echo "-----"
@@ -193,7 +209,7 @@ echo "-----"
 
 echo "Executing install2.sh in chroot..."
 ask_proceed
-arch-chroot /mnt /bin/bash -c "cd archlinux && chmod +x install2.sh && ./install2.sh"
+arch-chroot /mnt /bin/bash -c "cd /archlinux && chmod +x install2.sh && ./install2.sh"
 # TODO: Very important - see if this is equivalent to running the commands themselves!
 
 echo "-----"

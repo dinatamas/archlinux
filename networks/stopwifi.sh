@@ -20,9 +20,9 @@ killall dhcpcd
 
 # Print daemon status
 echo "Current systemd-networkd status"
-#indent 'systemctl status systemd-networkd'
+indent 'systemctl status systemd-networkd'
 echo "Current systemd-resolved status"
-#indent 'systemctl status systemd-resolved'
+indent 'systemctl status systemd-resolved'
 
 # Stop network daemons
 systemctl stop systemd-networkd

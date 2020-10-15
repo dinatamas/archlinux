@@ -15,16 +15,16 @@ sleep 2
 
 # Query the status
 echo "Current networkctl status of wlo1:"
-#indent 'networkctl status wlo1'
+indent 'networkctl status wlo1'
 echo "Current ip link status of wlo1:"
-#indent 'ip link show wlo1'
+indent 'ip link show wlo1'
 
 # Turn wifi on
 networkctl up wlo1
 sleep 1
 
 # Show wifi driver kernel messages
-dmesg | grep "rtw_8822be" | grep -v -e "Modules linked in"
+dmesg | grep "rtw_8822be" | grep -v -e "Modules linked in" | tail -n 10
 
 # Start wpa_supplicant
 wpa_supplicant -B -i wlo1 -c /etc/wpa_supplicant/wpa_supplicant.conf

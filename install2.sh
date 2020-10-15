@@ -6,7 +6,7 @@ COLOR_RESET=$(tput sgr0)
 
 function ask_proceed() {
     while true; do
-        read -p "Proceed? [y/N] " reply
+        read -p "Proceed? [y/n] " reply
         case $reply in
             [Yy]*)
                 break
@@ -55,10 +55,6 @@ echo "Synchronizing hardware clock..."
 ask_proceed_quiet
 hwclock --systohc
 
-echo "New time and date configuration:"
-indent 'timedatectl status'  # FIXME: still displays wrong status. Maybe exec bash -c...?
-ask_proceed_quiet
-
 echo "-----"
 
 echo "Enabling HU and en_US locale..."
@@ -77,7 +73,6 @@ echo "dinatamas-laptop" > /etc/hostname
 
 echo "Setting localhost IP adresses..."
 ask_proceed_quiet
-# TODO: An extra newline here?
 echo "dinatamas-laptop" > /etc/hostname
 echo "" >> /etc/hosts
 echo "127.0.0.1    localhost" >> /etc/hosts
@@ -104,7 +99,7 @@ echo "update_config=1" >> /etc/wpa_supplicant/wpa_supplicant.conf
 echo "-----"
 
 echo "Copying over network configuration..."
-ask_proceed
+ask_proceed_quiet
 cp ./networks/*.network /etc/systemd/network/
 
 echo "-----"
@@ -135,13 +130,12 @@ useradd dinatamas
 
 echo "Setting the password for dinatamas..."
 ask_proceed_quiet
-passwd
+passwd dinatamas
 
 echo "Copying configuration files..."
 ask_proceed_quiet
 cp ./vimrc /home/dinatamas/.vimrc
 cp ./bashrc /home/dinatamas/.bashrc
-rm -rf archlinux/ 
 chown -R dinatamas:dinatamas /home/dinatamas
 
 echo "Configuring sudo..."
@@ -154,6 +148,7 @@ echo "dinatamas ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "-----"
 
 echo "Done!"
+echo "The installation sources will remain in /archlinux."
 ask_proceed_quiet
 exit
 

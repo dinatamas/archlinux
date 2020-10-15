@@ -17,8 +17,10 @@ __Preparatory steps__
 1. Connect to the internet, using Wi-fi, Ethernet, USB tethering, etc.
 
 __Run the install scripts__
-1. `wget https://github.com/dinatamas/archlinux/tarball/master`
-1. `tar xvf master`
+1. `loadkeys hu`
+1. `pacman -Sy git`
+1. `git clone https://github.com/dinatamas/archlinux.git`
+1. `cd archlinux`
 1. `chmod +x ./install1.sh`
 1. `./install1.sh`
 1. After executing the script, please reboot.
@@ -34,6 +36,11 @@ __Run the install scripts__
 * Desktop: xorg <-> wayland
 * Desktop: xinit <-> startx
 * Users are responsible for updating non-official driver packages in major kernel updates.
+* Some configurations don't work automatically (for informative console output):
+    * wifi ping from the startwifi script
+    * timedatectl not syncing automatically
+* Full system upgrade upon first start?
+* Copy network scripts and dotfiles to easily available places. Both root and new users?
 
 ### Installing more software
 * Install recommended packages of installed packages with pacman?
@@ -53,6 +60,10 @@ __Run the install scripts__
 * More safety switches: etc. check wifi issue, check intel or amd microcode, etc.
 * `wpa_passphrase` wrapper: no plain pwd, priorities, hidden networks.
 * Write more scripts: turn on/off wifi, bluetooth, gui, etc.
+* Experiment with executing all commands using indent.
+* Use a logfile for the script!
+* Experiment with more visible delimiters, e.g. multiple lines of characters?
+* Remember where last execution left off and retry from there.
 
 ### More system configuration
 * RSA, PGP key generation + SSH setup.
