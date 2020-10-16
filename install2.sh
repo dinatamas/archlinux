@@ -108,6 +108,7 @@ echo "Configuring git globally..."
 ask_proceed_quiet
 git config --global user.name "dinatamaspal"
 git config --global user.email "53911660+dinatamas@users.noreply.github.com"
+git config --global user.editor "vim"
 # TODO: more git config options
 
 echo "-----"

@@ -1,6 +1,6 @@
 # My archlinux setup
 
-> Dina Tamás Pál | 2020.10.11.
+> Dina Tamás Pál | 2020.10.15.
 
 ------------------------------
 
@@ -25,6 +25,31 @@ __Run the install scripts__
 1. `./install1.sh`
 1. After executing the script, please reboot.
 
+__First run__
+1. `sudo pacman -Syu`
+
+## Explanation of dotfiles
+
+**Cross-user:**
+* `/etc/profile`: Cross-shell configuration. Not modified.
+* `/etc/profile.d`: Cross-shell configurations for specific programs. Not modified.
+* `/etc/inputrc`: Modified to ensure that the command-line bell is muted.
+* `/etc/bashrc`: Sourced by `/etc/profile` when bash shell is recognized. Not used.
+* `/etc/bash.bashrc`: This is used instead of `/etc/bashrc`. Not modified.
+
+**User-specific:**
+* `~/.profile`: Cross-shell configuration. Bash uses it in absence of `~/.bash_profile` and `~/.bash_login`. Not used.
+* `~/.bash_profile`: Preferred configuration file for bash login shells. Not modified.
+* `~/.bash_login`: Configuration file in absence of `~/.bash_profile`. Not used.
+* `~/.bash_logout`: Used to perform actions upon logging out. Not used.
+* `~/.bash_aliases`: Separate file to store bash aliases. Not used.
+* `~/.bashrc`: Used for non-login shells, but is also sourced by login-shell configs. This file is modified.
+
+**Program-specific:**
+* `/etc/vim/vimrc`: Cross-user vim configuration. Not modified.
+* `~/.vimrc`: User-specific vim configuration. This file is modified.
+* `~/.tmux.conf`: User-specific tmux configuration. This file is modified.
+
 ## TODO
 
 ### Miscellaneous
@@ -39,8 +64,9 @@ __Run the install scripts__
 * Some configurations don't work automatically (for informative console output):
     * wifi ping from the startwifi script
     * timedatectl not syncing automatically
-* Full system upgrade upon first start?
-* Copy network scripts and dotfiles to easily available places. Both root and new users?
+* Examine the archiso image for packages, configs, etc.
+* Look for config file examples.
+* Config files should not be duplicated between root and dinatamas!
 
 ### Installing more software
 * Install recommended packages of installed packages with pacman?
