@@ -1,11 +1,15 @@
 #!/bin/bash
 
+##############################################################################
+# General script-utilities.                                                  #
+##############################################################################
+
 COLOR_RED=$(tput setaf 1)
 COLOR_YELLOW=$(tput setaf 3)
 BOLD=$(tput bold)
 COLOR_RESET=$(tput sgr0)
 
-function print_help() {
+function print_help {
     cat << EOF
 Start this script in the initial archlinux virtual console.
 Please make sure to read through the official Installation Guide.
@@ -13,7 +17,7 @@ EOF
     exit 0
 }
 
-function parse_args() {
+function parse_args {
     local arg
     while [[ $# -gt 0 ]]; do
         arg="$1"
@@ -30,7 +34,7 @@ function parse_args() {
     done
 }
 
-function ask_proceed() {
+function ask_proceed {
     while true; do
         read -p "Proceed? [y/n] " reply
         case $reply in
@@ -48,14 +52,18 @@ function ask_proceed() {
     done
 }
 
-function ask_proceed_quiet() {
+function ask_proceed_quiet {
     read -s -p "Press Enter to proceed..." _
     echo -en "\033[2K"; printf "\r"
 }
 
-function indent() {
+function indent {
     eval "$@" |& sed "s/^/\t/" ; return "$PIPESTATUS"
 }
+
+##############################################################################
+# This is where the installation script begins.                              #
+##############################################################################
 
 parse_args "$@"
 
@@ -117,7 +125,7 @@ echo "sfdisk script:"
 indent "echo \"$sfdisk_script\""
 echo "The above sfdisk script will be applied"
 ask_proceed
-echo "$sfdisk_script" | sfdisk /dev/sda
+echo "$sfdisk_script" | sfdisk --wipe always /dev/sda
 
 echo "-----"
 
@@ -149,7 +157,7 @@ echo "Generating new mirror file..."
 ask_proceed_quiet
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 echo "Original mirrorfile backed up to /etc/pacman.d/mirrorlist.bak"
-curl "https://www.archlinux.org/mirrorlist/?country=HU&protocol=https&ip_version=4&use_mirror_status=on" > ./mirrorlist &>/dev/null
+curl "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&ip_version=4&use_mirror_status=on" > ./mirrorlist &>/dev/null
 sed -i 's/#Server/Server/g' ./mirrorlist
 echo "This mirror file will be applied:"
 indent "cat ./mirrorlist"
@@ -164,30 +172,34 @@ echo "The following packages will be installed:"
 base="base base-devel efibootmgr git grub intel-ucode linux linux-firmware"
 indent "echo \"Base packages that are required for a minimal installation: ${base}\""
 helpgetting="man-db man-pages texinfo"
-indent "echo \"Packages to help getting help:                              ${helpgetting}\""
-networking="dhcpcd wpa_supplicant"
+indent "echo \"Packages for getting help:                                  ${helpgetting}\""
+networking="networkmanager"
 indent "echo \"Packages required for networking:                           ${networking}\""
 coreutils="cronie curl diffutils less openssh openssl rsync sudo util-linux vi vim wget"
 indent "echo \"The most basic utilities:                                   ${coreutils}\""
 archiving="bzip2 gzip p7zip unzip zip"
 indent "echo \"Archiving, compressing, extracting:                         ${archiving}\""
-system="htop hwinfo lshw mc neofetch"
+system="cfdisk fdisk htop hwinfo lshw mc neofetch"
 indent "echo \"Tools for system management:                                ${system}\""
 extended="tmux transmission-cli"
 indent "echo \"Extended utilities:                                         ${extended}\""
+eyecandy="powerline"
+indent "echo \"Exe candy:                                                  ${eyecandy}\""
 ask_proceed
+packagelist="${base} ${helpgetting} ${networking}"
 pacstrap /mnt $packagelist # &>/dev/null
 
 # Things to be added to the above list:
 # Developer stuff: docker, jo, jq, python3.8
 # Devices and multimedia: alsa-utils pavucontrol pciutils pulseaudio usbutils
-# GUI basics: gnu-free-fonts i3 xorg-server xorg-xinit xorg-xrandr
-# GUI applications: bitwarden, calendar, firefox, spotify, terminator, todoist, vlc, vscode
+# GUI basics: dmenu gnu-free-fonts i3 xorg-server xorg-xinit xorg-xrandr
+# GUI applications: bitwarden, calendar, firefox, spotify, terminator, todoist, vlc
+# GUI code editors: atom, sublime, vscode
 
 # Things that are here just to remember them:
-# Alternative networking packages: dhclient dhcping iw iwd network-manager
+# More networking:dhclient dhcpcd dhcping iw iwd netctl network-manager wpa_supplicant
 # GNU stuff: gdm gnome-control-center gnome-session
-# Misc/unknown: dmenu mlocate polkit polybar udev yay
+# Misc/unknown: mlocate polkit polybar udev yay
 
 echo "-----"
 

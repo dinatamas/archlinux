@@ -21,7 +21,7 @@ __Run the install scripts__
 1. `pacman -Sy git`
 1. `git clone https://github.com/dinatamas/archlinux.git`
 1. `cd archlinux`
-1. `chmod +x ./install1.sh`
+1. `chmod +x ./install*.sh`
 1. `./install1.sh`
 1. After executing the script, please reboot.
 
@@ -61,19 +61,17 @@ __First run__
 * Desktop: xorg <-> wayland
 * Desktop: xinit <-> startx
 * Users are responsible for updating non-official driver packages in major kernel updates.
-* Some configurations don't work automatically (for informative console output):
-    * wifi ping from the startwifi script
-    * timedatectl not syncing automatically
 * Examine the archiso image for packages, configs, etc.
 * Look for config file examples.
-* Config files should not be duplicated between root and dinatamas!
+* `echo "needs_root_rights=yes" >> /etc/X11/Xwrapper.config`?
+* home-dir or etc `bash_profile` sourcing `.bashrc`?
 
 ### Installing more software
 * Install recommended packages of installed packages with pacman?
 * Review the list of packages available in the installation medium.
 * Review the list of packages in base, base-devel, linux, linux-firmware.
 * Review the Arch Linux list of applications.
-* Configure AUR (and Arch build system) and install some packages from there.
+* Configure AUR (and Arch build system) and a simple AUR-manager (like yay).
 * Install pkgstats?
 * Security, GNU-binutils, pwn tools.
 * Multimedia, codecs, professional audio, sound servers.
@@ -94,21 +92,24 @@ __First run__
 ### More system configuration
 * RSA, PGP key generation + SSH setup.
 * Setup repeated maintenance, such as security/risk checks, mirror file updates, backups.
-* Read Arch Linuy new RSS.
+* Read Arch Linux news RSS.
 * Security hardening: firewall, systemctl --failed, dmesg grep for errors, use secure DNS services.
 * Performance improvements: laptops, CPU scaling, ThrottleStop.
-* Performance benchmarking: install tools and setup regular checks
+* Performance benchmarking: install tools and setup regular checks.
 * xdg-user-dirs and xdg-users-dirs-update.service.
+* df -Tha --total, du -ach | sort -h, free -mt, lsblk -o "NAME,PATH,SIZE,TYPE,FSTYPE,MOUNTPOINT"
 
 ### Personal configuration
-* Better fonts (TrueType/GNU free).
 * Bash resources, tips&tricks, aliases.
-* Prompt: user@topmost-directory.
 * Improve copy-paste, tab completion.
 * Disable beep system-wide.
 * Uniform look for GTK and QT (themes?)
-* Eye candy: wallpapers, etc.
-* Desktop settings: keyboard layout.
+* Eye candy: wallpapers, etc. See more i3 config,
+* Start with fn+esc by default.
+* Important: powerline for tmux, bash, i3, vim.
+* Vim configuration: vim-plug, vim-sensible, vim-subline-monokai.
+* Vim configuration: JohnHammond's vimrc file?
+* Powerilne!!??
 
 ### Do some reading
 * See more guides, with packages like archdi (arch desktop install).
@@ -118,3 +119,4 @@ __First run__
 * Traffic shaping.
 * How to get help? Alternatives to apt-get and dman...
     * `pacman -Qlg <package_name> | grep /usr/bin`
+* xterm and terminfo/tset capabilities.

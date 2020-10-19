@@ -8,14 +8,19 @@ noremap <silent> $ g$
 set hlsearch
 set ignorecase
 
-" Mute vim.
+" Mute bell.
 set belloff=all
 
 " Better tabs.
+set autoindent
+set copyindent
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 
-" Enable line numbers
+" Enable line numbers.
 set number
+
+" vim and tmux interoperability.
+set background=dark
 
 " Experimentals.
 syntax on

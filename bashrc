@@ -1,3 +1,9 @@
+# Use Powerline! This is a bit bloaty, but I think it's worth it.
+powerline-daemon -q
+POWERLINE_BASH_CONTINUATION=1
+POWERLINE_BASH_SELECT=1
+. /usr/share/powerline/bindings/bash/powerline.sh
+
 # History settings.
 HISTCONTROL=ignoreboth
 shopt -s histappend
@@ -7,10 +13,11 @@ HISTFILESIZE=2000
 # Check window size after each command.
 shopt -s checkwinsize
 
-# '**' will match strongly.
-shopt -s globstar
+# '**' will match a lot of things.
+# shopt -s globstar
 
 # Set custom prompt.
+# Powerline will overwrite this.
 PS1='\[\033[01;32m\]\u\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 
 # Set aliases.
@@ -18,4 +25,53 @@ alias ls="ls -AlCF --color=auto"
 alias grep="grep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
+alias mkdir="mkdir -vp"
+alias history="history | grep -i"
+alias Tami="echo \"Tomi <3 Tami\""
+alias vi="vim"
+alias ping="ping -c 2"
 export LESS="$LESS -R -Q"
+
+# Use cd and ls together.
+function cd {
+    builtin cd "$@"
+    ls
+}
+
+# Print battery info.
+function battery {
+    cat /sys/class/power_supply/BAT0/capacity
+}
+
+# Decompress compressed files.
+function extract {
+    for n in $@; do
+        case "${n%,}" in
+            *.tar.gz | *.tar.xz | *.tgz | *.txz | *.tar)
+                tar xvf "$n" ;;
+            *.rar)
+                unrar x -ad "$n" ;;
+            *.gz)
+                gunzip "$n" ;;
+            *.zip)
+                unzip "$n" ;;
+            *.z)
+                uncompress "$n" ;;
+            *.7z)
+                7z x "$n" ;;
+            *.xz)
+                unxz "$n" ;;
+            *)
+                echo "extract: '$n' - unknown archive method" ;;
+        esac
+    done
+}
+
+# Set aliases for wifi-related scripts.
+alias startwifi="sudo /archlinux/network/systemd/startwifi.sh"
+alias stopwifi="sudo /archlinux/network/systemd/stopwifi.sh"
+
+# Auto-start tmux (if not already running).
+if [ -z "$TMUX" ]; then
+    tmux
+fi

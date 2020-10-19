@@ -1,5 +1,9 @@
 #!/bin/bash
 
+##############################################################################
+# General script-utilities.                                                  #
+##############################################################################
+
 COLOR_RED=$(tput setaf 1)
 BOLD=$(tput bold)
 COLOR_RESET=$(tput sgr0)
@@ -30,6 +34,10 @@ function ask_proceed_quiet() {
 function indent() {
     eval "$@" |& sed "s/^/\t/" ; return "$PIPESTATUS"
 }
+
+##############################################################################
+# This is where the installation script begins.                              #
+##############################################################################
 
 echo
 echo "=================="
@@ -65,6 +73,14 @@ echo "LANG=en_US.UTF-8" > /etc/locale.conf
 echo "KEYMAP=hu" > /etc/vconsole.conf
 locale-gen
 
+echo "Copying console fonts..."
+ask_proceed_quiet
+cp ./fonts/cli/* /usr/share/kbd/consolefonts/
+
+echo "Changing default console font..."
+ask_proceed_quiet
+echo "FONT=\"ter-powerline-v14n\"" >> /etc/vconsole.conf
+
 echo "-----"
 
 echo "Setting hostname to dinatamas-laptop..."
@@ -92,15 +108,13 @@ echo "Fixing the wifi connection..."
 ask_proceed
 echo "options rtw88_pci disable_aspm=1" > /etc/modprobe.d/rtw88_pci.conf
 echo "options rtw88_core lps_deep_mode=0" > /etc/modprobe.d/rtw88_core.conf
-echo "ctrl_interface=/run/wpa_supplicant" > /etc/wpa_supplicant/wpa_supplicant.conf
-echo "update_config=1" >> /etc/wpa_supplicant/wpa_supplicant.conf
-# TODO: Separate fixwifi script?
 
 echo "-----"
 
 echo "Copying over network configuration..."
 ask_proceed_quiet
-cp ./networks/*.network /etc/systemd/network/
+cp ./network/systemd/*.network /etc/systemd/network/
+cp ./network/systemd/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 echo "-----"
 
@@ -123,7 +137,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 echo "-----"
 
-# TODO: Review the following (John Hammond)
 echo "Creating a new user called dinatamas..."
 ask_proceed_quiet
 mkdir /home/dinatamas
@@ -137,6 +150,10 @@ echo "Copying configuration files..."
 ask_proceed_quiet
 cp ./vimrc /home/dinatamas/.vimrc
 cp ./bashrc /home/dinatamas/.bashrc
+cp ./tmux.conf /home/dinatamas/.tmux.conf
+ln -sf /home/dinatamas/.vimrc /root/.vimrc
+ln -sf /home/dinatamas/.bashrc /root/.bashrc
+ln -sf /home/dinatamas/.tmux.conf /root/.tmux.conf
 chown -R dinatamas:dinatamas /home/dinatamas
 
 echo "Configuring sudo..."
@@ -144,7 +161,18 @@ ask_proceed_quiet
 groupadd sudo
 usermod -aG sudo dinatamas
 sed -i 's/# %sudo/%sudo/g' /etc/sudoers
-echo "dinatamas ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+echo "Verifying sudo..."
+indent 'visudo -c'
+ask_proceed_quiet
+
+echo "-----"
+
+echo "Copying GUI fonts..."
+ask_proceed_quiet
+mkdir /home/dinatamas/.fonts
+cp ./fonts/gui/* /home/dinatamas/.fonts
+ln -sf /home/dinatamas/.fonts/ /root/.fonts/
 
 echo "-----"
 
