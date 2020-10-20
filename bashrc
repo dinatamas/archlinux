@@ -4,6 +4,9 @@ POWERLINE_BASH_CONTINUATION=1
 POWERLINE_BASH_SELECT=1
 . /usr/share/powerline/bindings/bash/powerline.sh
 
+# Use the solarized dark TTY theme.
+source /archlinux/themes/tty-solarized-dark-doubled.sh
+
 # History settings.
 HISTCONTROL=ignoreboth
 shopt -s histappend
@@ -22,15 +25,28 @@ PS1='\[\033[01;32m\]\u\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 
 # Set aliases.
 alias ls="ls -AlCF --color=auto"
+alias diff="diff --color=auto"
 alias grep="grep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
 alias mkdir="mkdir -vp"
 alias history="history | grep -i"
-alias Tami="echo \"Tomi <3 Tami\""
+alias Tami="echo -e \"\\nTomi <3 Tami\\n\""
 alias vi="vim"
 alias ping="ping -c 2"
+export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 export LESS="$LESS -R -Q"
+
+# Add color to man.
+man() {
+    LESS_TERMCAP_md=$'\e[01;31m' \
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[01;44;33m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[01;32m' \
+    command man "$@"
+}
 
 # Use cd and ls together.
 function cd {

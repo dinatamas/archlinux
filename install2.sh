@@ -79,7 +79,7 @@ cp ./fonts/cli/* /usr/share/kbd/consolefonts/
 
 echo "Changing default console font..."
 ask_proceed_quiet
-echo "FONT=\"ter-powerline-v14n\"" >> /etc/vconsole.conf
+echo "FONT=\"ter-powerline-v14n-custom\"" >> /etc/vconsole.conf
 
 echo "-----"
 
@@ -149,9 +149,13 @@ passwd dinatamas
 echo "Copying configuration files..."
 ask_proceed_quiet
 cp ./vimrc /home/dinatamas/.vimrc
+mkdir /home/dinatamas/.vim/
+cp ./bash_profile /home/dinatamas/.bash_profile
 cp ./bashrc /home/dinatamas/.bashrc
 cp ./tmux.conf /home/dinatamas/.tmux.conf
 ln -sf /home/dinatamas/.vimrc /root/.vimrc
+ln -sf /home/dinatamas/.vim/ /root/.vim/
+ln -sf /home/dinatamas/.bash_profile /root/.bash_profile
 ln -sf /home/dinatamas/.bashrc /root/.bashrc
 ln -sf /home/dinatamas/.tmux.conf /root/.tmux.conf
 chown -R dinatamas:dinatamas /home/dinatamas
@@ -173,6 +177,21 @@ ask_proceed_quiet
 mkdir /home/dinatamas/.fonts
 cp ./fonts/gui/* /home/dinatamas/.fonts
 ln -sf /home/dinatamas/.fonts/ /root/.fonts/
+
+echo "-----"
+
+echo "Installing vim plugin manager..."
+ask_proceed_quiet
+curl -sfLo /home/dinatamas/.vim/autoload/plug.vim --create-dirs "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+vim /home/dinatamas/.vimrc +PlugInstall +q +q
+
+echo "Enabling color in pacman..."
+ask_proceed_quiet
+sed -i 's/#Color/Color/g' /etc/pacman.conf
+
+echo "Setting up powerline bash prompt..."
+ask_proceed_quiet
+sed -i 's/\(.*depth.*\)3/\11/' /usr/lib/python3.8/site-packages/powerline/config_files/themes/shell/__main__.json
 
 echo "-----"
 

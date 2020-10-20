@@ -1,6 +1,6 @@
 # My archlinux setup
 
-> Dina Tamás Pál | 2020.10.15.
+> Dina Tamás Pál | 2020.10.20.
 
 ------------------------------
 
@@ -54,6 +54,7 @@ __First run__
 
 ### Miscellaneous
 * Add a LICENSE to this repository.
+* Add third-party licenses as well.
 * Consider alternative networking approaches.
 * Consider having a fallback kernel. (GRUB should handle this nicely...)
 * Consider using another shell (such as zsh or fish...)
@@ -64,7 +65,7 @@ __First run__
 * Examine the archiso image for packages, configs, etc.
 * Look for config file examples.
 * `echo "needs_root_rights=yes" >> /etc/X11/Xwrapper.config`?
-* home-dir or etc `bash_profile` sourcing `.bashrc`?
+* Consider installing Powerline with pip?
 
 ### Installing more software
 * Install recommended packages of installed packages with pacman?
@@ -88,6 +89,7 @@ __First run__
 * Use a logfile for the script!
 * Experiment with more visible delimiters, e.g. multiple lines of characters?
 * Remember where last execution left off and retry from there.
+* Use a different color (e.g. green) for "Doing something..." messages.
 
 ### More system configuration
 * RSA, PGP key generation + SSH setup.
@@ -98,6 +100,7 @@ __First run__
 * Performance benchmarking: install tools and setup regular checks.
 * xdg-user-dirs and xdg-users-dirs-update.service.
 * df -Tha --total, du -ach | sort -h, free -mt, lsblk -o "NAME,PATH,SIZE,TYPE,FSTYPE,MOUNTPOINT"
+* Perform regular updates for manually-installed stuff (and write the scripts for it)!
 
 ### Personal configuration
 * Bash resources, tips&tricks, aliases.
@@ -105,11 +108,11 @@ __First run__
 * Disable beep system-wide.
 * Uniform look for GTK and QT (themes?)
 * Eye candy: wallpapers, etc. See more i3 config,
-* Start with fn+esc by default.
-* Important: powerline for tmux, bash, i3, vim.
-* Vim configuration: vim-plug, vim-sensible, vim-subline-monokai.
-* Vim configuration: JohnHammond's vimrc file?
-* Powerilne!!??
+* Start with fn+esc by default (change in BIOS?).
+* Powerline for i3.
+* One-two blank line(s) above status line for vim.
+* Colorful /etc/issue login prompt?
+* Add heart character and make it red in the Tami command.
 
 ### Do some reading
 * See more guides, with packages like archdi (arch desktop install).
