@@ -56,12 +56,14 @@ set background=dark
 " Experimentals.
 syntax on
 filetype plugin on
+filetype indent on
 set history=50
 set ruler
 set wildmenu
 set backup
 set nocompatible
-" set bs=indent,eol,start
+set bs=indent
+" set whichwrap=b,s,<,>,[,] " To allow the left/right arrows keys to move between lines
 set complete-=i
 set nrformats-=octal
 set scrolloff=5 " Always show 5 lines after cursor.

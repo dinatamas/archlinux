@@ -64,8 +64,12 @@ __First run__
 * Users are responsible for updating non-official driver packages in major kernel updates.
 * Examine the archiso image for packages, configs, etc.
 * Look for config file examples.
+    * https://github.com/makccr/dot
+    * Tset-Noitamotua's vimrc
+    * https://vimawesome.com/
 * `echo "needs_root_rights=yes" >> /etc/X11/Xwrapper.config`?
 * Consider installing Powerline with pip?
+* Advanced vim tools: spellcheck, vimdiff.
 
 ### Installing more software
 * Install recommended packages of installed packages with pacman?
@@ -101,18 +105,44 @@ __First run__
 * xdg-user-dirs and xdg-users-dirs-update.service.
 * df -Tha --total, du -ach | sort -h, free -mt, lsblk -o "NAME,PATH,SIZE,TYPE,FSTYPE,MOUNTPOINT"
 * Perform regular updates for manually-installed stuff (and write the scripts for it)!
+* Low battery warning?i
+* Analyze htop: what processes are running? (e.g. why have 6 dhcpcd processes?)
 
 ### Personal configuration
 * Bash resources, tips&tricks, aliases.
 * Improve copy-paste, tab completion.
 * Disable beep system-wide.
 * Uniform look for GTK and QT (themes?)
-* Eye candy: wallpapers, etc. See more i3 config,
+* Eye candy: wallpapers, etc. See more i3 config.
+    * 512pixels: 5k default mac wallpapers.
+    * reddit unixwallpapers: 4k arch linux wallpapers.
 * Start with fn+esc by default (change in BIOS?).
-* Powerline for i3.
 * One-two blank line(s) above status line for vim.
 * Colorful /etc/issue login prompt?
 * Add heart character and make it red in the Tami command.
+* Make the lock glyph more centered.
+* Remove more unnecessary characters (look up Unicode codes).
+* Apply font changes at boot.
+* Powerline: readthedocs configuration segments.
+* tmux's powerline should show battery status.
+* Powerline: shell theme `default_leftonly`.
+
+### GUI configuration
+* Use the solarized theme in Xresources.
+* Configure pulseaudio and pavucontrol.
+* Powerline for i3 (i3status/i3bar?).
+* i3 transparent setup.
+* nice i3 icons: ionicons or fontawesome (ttf/otf).
+* i3 touchpad reversed.
+* i3 terminal: green line to the right side.
+* i3 rofi customization.
+* Different terminal emulator than terminator?
+    * If not: opacity, no titlebar, no scrollbar.
+* i3 tutorials: EF - Tech Made Simple, Code Cast.
+    * Install X (and dependencies) and i3 (and dependencies).
+    * Copy GUI-related config...
+    * Install acpilight instead of xorg-xbacklight.
+    * Install feh and download wallpaper.
 
 ### Do some reading
 * See more guides, with packages like archdi (arch desktop install).
