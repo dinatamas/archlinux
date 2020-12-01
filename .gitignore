@@ -4,3 +4,6 @@
 # Script files
 mirrorlist
 sda.dump
+
+# Secrets
+secrets.sh

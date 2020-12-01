@@ -30,7 +30,7 @@ alias grep="grep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
 alias mkdir="mkdir -vp"
-alias history="history | grep -i"
+alias hs="history | grep -i"
 alias Tami="echo -e \"\\nTomi <3 Tami\\n\""
 alias vi="vim"
 alias ping="ping -c 2"
@@ -91,3 +91,9 @@ alias stopwifi="sudo /archlinux/network/systemd/stopwifi.sh"
 if [ -z "$TMUX" ]; then
     tmux
 fi
+
+# Do NOT cache Python bytecode.
+export PYTHONDONTWRITEBYTECODE=1
+
+# Load secrets
+source /archlinux/secrets.sh

@@ -1,6 +1,5 @@
 call plug#begin("/home/dinatamas/.vim/plugged")
 
-Plug 'altercation/vim-colors-solarized'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -19,9 +18,8 @@ let g:airline_powerline_fonts = 1
 
 " Use 16 colors.
 set t_Co=16
-" Use solarized theme.
-set background=dark
-colorscheme solarized
+" Use different color scheme.
+set background=light
 
 " Remap k,j to move within wrapped lines.
 noremap <silent> k gk
@@ -50,9 +48,6 @@ set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 " Enable line numbers.
 set number
 
-" vim and tmux interoperability.
-set background=dark
-
 " Experimentals.
 syntax on
 filetype plugin on
@@ -66,6 +61,6 @@ set bs=indent
 " set whichwrap=b,s,<,>,[,] " To allow the left/right arrows keys to move between lines
 set complete-=i
 set nrformats-=octal
-set scrolloff=5 " Always show 5 lines after cursor.
+set scrolloff=999 " Always keep the cursor in the middle.
 set sidescrolloff=5 " Always show 5 columns next to cursor.
 set display+=lastline

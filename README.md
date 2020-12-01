@@ -58,6 +58,7 @@ __First run__
 * Consider alternative networking approaches.
 * Consider having a fallback kernel. (GRUB should handle this nicely...)
 * Consider using another shell (such as zsh or fish...)
+* zsh-like autocomplete in bash?
 * Desktop: basic i3 <-> gnome <-> pantheon
 * Desktop: xorg <-> wayland
 * Desktop: xinit <-> startx
@@ -70,6 +71,12 @@ __First run__
 * `echo "needs_root_rights=yes" >> /etc/X11/Xwrapper.config`?
 * Consider installing Powerline with pip?
 * Advanced vim tools: spellcheck, vimdiff.
+* Font does not support bold...
+* Find nice vim theme and nice plugins?
+* secrets file (in .gitignore) to store tokens etc. system-wide?
+* command-line dev: how2, socli, github-cli, readthedocs stuff, linux stuff, wikipedia, ...
+  books, pdfs, pep, python docs, learncpp, c++ docs...
+* Add directory print to pushd and popd as well.
 
 ### Installing more software
 * Install recommended packages of installed packages with pacman?
@@ -107,6 +114,13 @@ __First run__
 * Perform regular updates for manually-installed stuff (and write the scripts for it)!
 * Low battery warning?i
 * Analyze htop: what processes are running? (e.g. why have 6 dhcpcd processes?)
+* i3 and x: decrease the load after running i3 to previous state:
+    * `/usr/lib/gvfsd` and `/usr/lib/gvfsd-fuse`, `gvfsd-dnssd` and `...-network`
+    * `polkit`...
+    * `rtkit-daemon`
+    * `at-spi-bus-launcher` and `at-spi2-registryd`
+    * `/usr/lib/udisks2`
+    * `/usr/lib/goa-daemon`, `goa-identity-service`, `goa-volume-monitor`...
 
 ### Personal configuration
 * Bash resources, tips&tricks, aliases.
@@ -126,6 +140,7 @@ __First run__
 * Powerline: readthedocs configuration segments.
 * tmux's powerline should show battery status.
 * Powerline: shell theme `default_leftonly`.
+* vim search should show number of hits.
 
 ### GUI configuration
 * Use the solarized theme in Xresources.
