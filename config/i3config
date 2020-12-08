@@ -2,6 +2,13 @@
 # Keyboard shortcuts.                                                        #
 ##############################################################################
 
+# Color variables.
+set $bg-color            #2f343f
+set $inactive-bg-color   #2f343f
+set $text-color          #f3f4f5
+set $inactive-text-color #676e7d
+set $urgent-bg-color     #e53935
+
 # Set the default modifier key to Win ("super").
 set $mod Mod4
 
@@ -15,7 +22,7 @@ bindsym $mod+Return exec terminator
 bindsym $mod+Shift+q kill
 
 # Start rofi (a program launcher).
-bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "DejaVu Sans Mono 13"
+bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Source Code Pro Medium 11"
 
 # Change focus.
 bindsym $mod+j focus left
@@ -81,8 +88,8 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 ##############################################################################
 
 # Workspace variables.
-set $ws1 "1: Terminal"
-set $ws2 "2: Firefox"
+set $ws1 "1"
+set $ws2 "2"
 set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
@@ -115,10 +122,6 @@ bindsym $mod+Shift+7 move container to workspace number $ws7
 bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
-
-# Force apps to open on certain workspaces.
-assign [class="Terminator"] $ws1
-assign [class="firefox"] $ws2
 
 ##############################################################################
 # Resizing.                                                                  #
@@ -156,13 +159,6 @@ mode "resize" {
 # Eye candy.                                                                 #
 ##############################################################################
 
-# Color variables.
-set $bg-color            #2f343f
-set $inactive-bg-color   #2f343f
-set $text-color          #f3f4f5
-set $inactive-text-color #676e7d
-set $urgent-bg-color     #e53935
-
 # Window colors.
 #                       border             background         text                 indicator
 client.focused          $bg-color          $bg-color          $text-color          #00ff00
@@ -171,10 +167,11 @@ client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-col
 client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color          #00ff00
 
 # Do not show window borders, they are unnecessary.
-for_window [class=".*"] border pixel 01
+# Also hides split indicator (green line).
+for_window [class=".*"] border pixel 0
 
 # Set font.
-font pango:System San Francisco Display
+font pango:Source Code Pro Medium 11
 
 # Start i3bar to display a workspace bar.
 bar {
@@ -190,8 +187,8 @@ bar {
 }
 
 # Allow gaps.
-gaps inner 10
-gaps outer 10
+gaps inner 30
+gaps outer 30
 
 ##############################################################################
 # Auto-start applications.                                                   #
