@@ -1,0 +1,12 @@
+configuration {
+	width: 100;
+	lines: 3;
+	font: "Source Code Pro Medium 11";
+	bw: 0;
+	padding: 800;
+	eh: 2;
+	hide-scrollbar: true;
+        theme: "/archlinux/config/rofi/theme.rasi";
+	color-normal: "#2f343f, #f3f4f5, #2f343f, #2f343f, #9575cd";
+	color-window: "#2f343f, #2f343f, #2f343f";
+}

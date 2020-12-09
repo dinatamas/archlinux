@@ -13,11 +13,10 @@ alias tmux   "tmux -f /archlinux/config/tmux/tmux.conf"
 alias ping   "ping -c 2"
 alias startx "startx /archlinux/config/X/xinitrc"
 
-# Add color to less, plus mute it.
-set -x LESSOPEN "| /usr/bh n/source-highlight-esc.sh %s"
-set -x LESS     "$LESS -R -Q"
+# Mute less.
+set -x LESS "$LESS -R -Q"
 
-# Add color to man.
+# Add color to less and man.
 set -x LESS_TERMCAP_mb (printf "\033[01;31m")  
 set -x LESS_TERMCAP_md (printf "\033[01;31m")  
 set -x LESS_TERMCAP_me (printf "\033[0m")  

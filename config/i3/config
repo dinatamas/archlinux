@@ -1,13 +1,29 @@
-##############################################################################
-# Keyboard shortcuts.                                                        #
-##############################################################################
-
-# Color variables.
+# Nord color variables.
+set $nord0  #2E3440
+set $nord1  #3B4252
+set $nord2  #434C5E
+set $nord3  #4C566A
+set $nord4  #D8DEE9
+set $nord5  #E5E9F0
+set $nord6  #ECEFF4
+set $nord7  #8FBCBB
+set $nord8  #88C0D0
+set $nord9  #81A1C1
+set $nord10 #5E81AC
+set $nord11 #BF616A
+set $nord12 #D08770
+set $nord13 #EBCB8B
+set $nord14 #A3BE8C
+set $nord15 #B48EAD
 set $bg-color            #2f343f
 set $inactive-bg-color   #2f343f
 set $text-color          #f3f4f5
 set $inactive-text-color #676e7d
 set $urgent-bg-color     #e53935
+
+# ============================================================================
+# Keyboard shortcuts.
+# ============================================================================
 
 # Set the default modifier key to Win ("super").
 set $mod Mod4
@@ -16,31 +32,22 @@ set $mod Mod4
 floating_modifier $mod
 
 # Start a terminal.
-bindsym $mod+Return exec terminator
+bindsym $mod+Return exec --no-startup-id urxvt
 
 # Kill focused window.
 bindsym $mod+Shift+q kill
 
 # Start rofi (a program launcher).
-bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Source Code Pro Medium 11"
+bindsym $mod+d exec --no-startup-id rofi -show run
+#-show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Source Code Pro Medium 11"
 
-# Change focus.
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
-# Alternatively, you can use the cursor keys.
+# Change focus using the arrow keys.
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
-# Move focused window.
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
-# Alternatively, you can use the cursor keys.
+# Move windows using the arrow keys.
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
@@ -83,11 +90,12 @@ bindsym $mod+Shift+r restart
 # Exit i3.
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
-##############################################################################
-# Workspaces.                                                                #
-##############################################################################
+# ============================================================================
+# Workspaces.
+# ============================================================================
 
 # Workspace variables.
+set $ws0 "0"
 set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
@@ -97,9 +105,9 @@ set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
-set $ws10 "10"
 
 # Switch to workspace.
+bindsym $mod+0 workspace number $ws0
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
 bindsym $mod+3 workspace number $ws3
@@ -109,9 +117,9 @@ bindsym $mod+6 workspace number $ws6
 bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
-bindsym $mod+0 workspace number $ws10
 
 # Move focused container to workspace.
+bindsym $mod+Shift+0 move container to workspace number $ws0
 bindsym $mod+Shift+1 move container to workspace number $ws1
 bindsym $mod+Shift+2 move container to workspace number $ws2
 bindsym $mod+Shift+3 move container to workspace number $ws3
@@ -121,11 +129,10 @@ bindsym $mod+Shift+6 move container to workspace number $ws6
 bindsym $mod+Shift+7 move container to workspace number $ws7
 bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
-bindsym $mod+Shift+0 move container to workspace number $ws10
 
-##############################################################################
-# Resizing.                                                                  #
-##############################################################################
+# ============================================================================
+# Resizing.
+# ============================================================================
 
 # resize mode.
 bindsym $mod+r mode "resize"
@@ -138,12 +145,6 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
-
-        # Same bindings, but for the arrow keys.
         bindsym Left resize shrink width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
         bindsym Up resize shrink height 10 px or 10 ppt
@@ -155,9 +156,9 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-##############################################################################
-# Eye candy.                                                                 #
-##############################################################################
+# ============================================================================
+# Eye candy.
+# ============================================================================
 
 # Window colors.
 #                       border             background         text                 indicator
@@ -190,9 +191,9 @@ bar {
 gaps inner 30
 gaps outer 30
 
-##############################################################################
-# Auto-start applications.                                                   #
-##############################################################################
+# ============================================================================
+# Auto-start applications.
+# ============================================================================
 
 # Keyboard layout.
 exec_always --no-startup-id setxkbmap hu
@@ -201,4 +202,4 @@ exec_always --no-startup-id setxkbmap hu
 exec_always --no-startup-id xrandr --output Virtual-1 --mode 1920x1080
 
 # Set wallpaper.
-exec_always --no-startup-id feh --bg-scale /archlinux/wallpaper
+exec_always --no-startup-id feh --no-fehbg --bg-scale /archlinux/media/wallpaper
