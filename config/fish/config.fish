@@ -37,13 +37,15 @@ set -x GIT_CONFIG "/archlinux/config/git/gitconfig"
 set -x EMACS_USER_DIRECTORY "$HOME/.config/emacs.d/"
 set -x GNUPGHOME "$HOME/.local/gnupg/.gnupg"
 set -x XAUTHORITY "$HOME/.config/X/xauthority"
+set -x LESSHISTFILE "$HOME/.config/lesshst"
 
 # Do NOT cache Python bytecode.
 set -x PYTHONDONTWRITEBYTECODE 1
 
 # Script aliases.
 alias battery "/archlinux/scripts/battery.fish"
-alias monitor "/archlinux/scripts/monitor.fish"
+alias monitor "xrandr --auto"
+alias wifi    "systemctl start NetwokrManager"
 
 # Load my secrets. Keep this file safe!
 source /archlinux/scripts/secrets.fish
@@ -53,11 +55,14 @@ if [ "$TERM" = "linux" ]
    exit
 end
 
-# Use Powerline! This is a bit bloaty, but I think it's worth it.
-source /usr/share/powerline/bindings/fish/powerline-setup.fish
-powerline-setup
 
 # Auto-start tmux (if not already running).
 if not set -q TMUX
     tmux
+end
+
+# Use Powerline! This is a bit bloaty, but I think it's worth it.
+if set -q TMUX
+    source /usr/share/powerline/bindings/fish/powerline-setup.fish
+    powerline-setup
 end

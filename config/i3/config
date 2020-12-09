@@ -21,6 +21,8 @@ set $text-color          #f3f4f5
 set $inactive-text-color #676e7d
 set $urgent-bg-color     #e53935
 
+set $exec exec --no-startup-id
+
 # ============================================================================
 # Keyboard shortcuts.
 # ============================================================================
@@ -32,14 +34,13 @@ set $mod Mod4
 floating_modifier $mod
 
 # Start a terminal.
-bindsym $mod+Return exec --no-startup-id urxvt
+bindsym $mod+Return $exec urxvt
 
 # Kill focused window.
 bindsym $mod+Shift+q kill
 
 # Start rofi (a program launcher).
-bindsym $mod+d exec --no-startup-id rofi -show run
-#-show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc "$bg-color" -bg "$bg-color" -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Source Code Pro Medium 11"
+bindsym $mod+d $exec rofi -show run -display-run ">>>"
 
 # Change focus using the arrow keys.
 bindsym $mod+Left focus left
@@ -71,24 +72,24 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # Lock the screen.
-bindsym $mod+shift+x exec i3lock --color "$bg-color"
+bindsym $mod+shift+x $exec i3lock --color "$bg-color"
 
 # Pulse Audio controls.
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% # Increase sound volume.
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% # Decrease sound volume.
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # Mute sound.
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute 0 toggle # Mute microphone.
+bindsym XF86AudioRaiseVolume $exec pactl set-sink-volume 0 +5% # Increase sound volume.
+bindsym XF86AudioLowerVolume $exec pactl set-sink-volume 0 -5% # Decrease sound volume.
+bindsym XF86AudioMute $exec pactl set-sink-mute 0 toggle # Mute sound.
+bindsym XF86AudioMicMute $exec pactl set-source-mute 0 toggle # Mute microphone.
 
 # Screen brightness controls.
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # Increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # Decrease screen brightness
+bindsym XF86MonBrightnessUp $exec xbacklight -inc 20 # Increase screen brightness
+bindsym XF86MonBrightnessDown $exec xbacklight -dec 20 # Decrease screen brightness
 
 # Reload the configuration file.
 bindsym $mod+Shift+c reload
 # Restart i3 inplace.
 bindsym $mod+Shift+r restart
 # Exit i3.
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e $exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # ============================================================================
 # Workspaces.
@@ -199,7 +200,10 @@ gaps outer 30
 exec_always --no-startup-id setxkbmap hu
 
 # Display resolution.
-exec_always --no-startup-id xrandr --output Virtual-1 --mode 1920x1080
+exec_always --no-startup-id xrandr --auto
 
 # Set wallpaper.
-exec_always --no-startup-id feh --no-fehbg --bg-scale /archlinux/media/wallpaper
+exec_always --no-startup-id feh --no-fehbg --bg-scale /archlinux/wallpapers/wallpaper
+
+# Run for transparency.
+exec_always --no-startup-id xcompmgr
