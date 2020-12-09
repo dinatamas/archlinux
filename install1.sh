@@ -5,51 +5,47 @@ function ask_proceed {
     echo -en "\033[2K"; printf "\r"
 }
 
-while [ $# -gt 0 ]; do
-    arg="$1"
-    shift
-    case $arg in
-        -h | --help)
-            cat << EOM
-Start this script in the initial archlinux virtual console.
-Please make sure to read through the official Installation Guide.
-Configuration of this script can be done by editing it.
-EOM
-	    exit 0
-            ;;
-        *)
-            echo "Invalid argument: $arg"
-            exit 1
-            ;;
-     esac
-done
+function echo_and_log {
+    echo "$1" | tee -a ./install.log
+}
 
-echo "Verifying that the computer has network connectivity..."
+if [ $# -gt 0 ]; do
+    cat << EOM
+Start this script in the initial archlinux virtual console.
+Please make sure to read through the README.
+EOM
+fi
+
+echo_and_log "Logging to ./install.log..."
 ask_proceed
-ping archlinux.org -c 3 &>/dev/null
+> ./install.log
+
+echo_and_log "Verifying that the computer has network connectivity..."
+ask_proceed
+ping archlinux.org -c 1 &>> ./install.log
 if [ $? -ne 0 ]; then
-    echo "Error: No network connectivity!"
+    echo_and_log "Error: No network connectivity!"
     exit 1
 fi
 
-echo "Loading keyboard layout..."
+echo_and_log "Loading keyboard layout..."
 ask_proceed
 loadkeys hu
 
-echo "Verifying that the system was booted in UEFI mode..."
+echo_and_log "Verifying that the system was booted in UEFI mode..."
 ask_proceed
-ls /sys/firmware/efi/efivars &>/dev/null
+ls /sys/firmware/efi/efivars &> /dev/null
 if [ $? -ne 0 ]; then
-    echo "Warning: The system wasn't booted in UEFI mode!";
+    echo_and_log "Warning: The system wasn't booted in UEFI mode!";
     ask_proceed
 fi
 
-echo "Backing up current partition layout to sda.dump..."
+echo_and_log "Backing up current partition layout to sda.dump..."
 ask_proceed
 sfdisk --dump /dev/sda > sda.dump
 
-echo "Creating new partition layout..."
-echo "If you proceed, all will be erased from sda."
+echo_and_log "Creating new partition layout..."
+echo_and_log "If you proceed, all data will be erased from sda."
 ask_proceed
 read -r -d '' sfdisk_script << EOM
 label: gpt
@@ -57,61 +53,60 @@ label: gpt
 /dev/sda2 : size=4GiB type=0657FD6D-A4AB-43C4-84E5-0933C84B4F4F
 /dev/sda3 : type=4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709
 EOM
-echo "$sfdisk_script" | sfdisk --wipe always /dev/sda
+echo "$sfdisk_script" | sfdisk --wipe always /dev/sda &>> ./install.log
 
-echo "Creating new filesystems..."
+echo_and_log "Creating new filesystems..."
 ask_proceed
-mkfs.fat -F32 /dev/sda1
-mkswap /dev/sda2
-mkfs.ext4 /dev/sda3
+mkfs.fat -F32 /dev/sda1 &>> ./install.log
+mkswap /dev/sda2 &>> ./install.log
+mkfs.ext4 /dev/sda3 &>> ./install.log
 
-echo "Mounting new filesystems..."
+echo_and_log "Mounting new filesystems..."
 ask_proceed
-mkdir /mnt/efi
-mount /dev/sda1 /mnt/efi
-swapon /dev/sda2
-mount /dev/sda3 /mnt
+mkdir /mnt/efi &>> ./install.log
+mount /dev/sda1 /mnt/efi &>> ./install.log
+swapon /dev/sda2 &>> ./install.log
+mount /dev/sda3 /mnt &>> ./install.log
 
-echo "Generating new mirror file..."
+echo_and_log "Generating new mirror file..."
 ask_proceed
-curl "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&ip_version=4&use_mirror_status=on" > ./mirrorlist &>/dev/null
-sed -i 's/#Server/Server/g' ./mirrorlist
-mv ./mirrorlist /etc/pacman.d/mirrorlist
+curl -S -o ./mirrorlist "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&ip_version=4&use_mirror_status=on" 2> ./install.log
+sed -i 's/#Server/Server/g' ./mirrorlist &>> ./install.log
+mv ./mirrorlist /etc/pacman.d/mirrorlist &>> ./install.log
 
-echo "Installing packages..."
+echo_and_log "Installing packages..."
 ask_proceed
-packagelist="base base-devel efibootmgr git grub intel-ucode linux linux-firmware"
-packagelist+="man-db man-pages texinfo"
-packagelist+="networkmanager"
-packagelist+="cronie curl diffutils emacs less openssh openssl rsync sudo util-linux wget"
-packagelist+="bzip2 gzip p7zip unzip zip"
-packagelist+="cfdisk fdisk htop hwinfo lshw mc neofetch"
-packagelist+="tmux transmission-cli"
-packagelist+="powerline"
-packagelist+="docker jo jq python3.8"
-packagelist+="alsa-utils pavucibtrik pciutils pulseaudio usbutils"
-packagelist+="dmenu gnu-free-fonts i3 xorg-server xorg-xinit xorg-xrandr"
-packagelist+="firefox terminator"
-pacstrap /mnt $packagelist
+packagelist="base base-devel efibootmgr git grub intel-ucode linux linux-firmware fish"
+packagelist+=" man-db man-pages texinfo"
+packagelist+=" networkmanager"
+packagelist+=" cronie curl diffutils emacs less openssh openssl rsync sudo util-linux wget"
+packagelist+=" bzip2 gzip p7zip unzip zip"
+packagelist+=" htop hwinfo lshw mc neofetch"
+packagelist+=" tmux qbittorrent"
+packagelist+=" powerline"
+packagelist+=" docker jq"
+packagelist+=" alsa-utils pavucontrol pciutils pulseaudio usbutils"
+packagelist+=" gnu-free-fonts i3 rofi xorg-server xorg-xinit xorg-xrandr"
+packagelist+=" firefox terminator"
+pacstrap /mnt $packagelist &>> ./install.log
 
-echo "Generating fstab file..."
+echo_and_log "Generating fstab file..."
 ask_proceed
 genfstab -U /mnt >> /mnt/etc/fstab
 
-echo "Copying over resource and environment files..."
+echo_and_log "Copying over resource and environment files..."
 ask_proceed
-mkdir /mnt/archlinux
-cp -r ./* /mnt/archlinux/
+cp -rT /archlinux /mnt &>> ./install.log
 
-echo "Executing install2.sh in chroot..."
+echo_and_log "Executing install2.sh in chroot..."
 ask_proceed
 arch-chroot /mnt /bin/bash -c "cd /archlinux && chmod +x install2.sh && ./install2.sh"
 
-echo "Unmounting /mnt to check for errors..."
-umount /mnt/efi
-umount /mnt
-swapoff /dev/sda2
+echo_and_log "Unmounting mount points to check for errors..."
+umount /mnt/efi &>> ./install.log
+umount /mnt &>> ./install.log
+swapoff /dev/sda2 &>> ./install.log
 
-echo "Done!"
-echo "Please reboot."
+echo_and_log "Done!"
+echo_and_log "Please reboot."
 ask_proceed

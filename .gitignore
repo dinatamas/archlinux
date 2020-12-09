@@ -7,3 +7,6 @@ sda.dump
 
 # Secrets
 secrets.sh
+
+# Known shared configs.
+config/tmux/plugins/

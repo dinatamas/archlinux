@@ -3,4 +3,4 @@
 	email = 53911660+dinatamas@users.noreply.github.com
 [core]
 	editor = emacs
-	excludefile = /archlinux/config/gitignore
+	excludesfile = /archlinux/config/git/gitignore
