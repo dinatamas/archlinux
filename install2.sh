@@ -94,14 +94,13 @@ echo "options rtw88_core lps_deep_mode=0" > /etc/modprobe.d/rtw88_core.conf
 echo_and_log "Copying configuration files..."
 ask_proceed
 chown -R root:root /archlinux
-chmod -R 755 /archlinux
+chmod -R 777 /archlinux
 chmod 700 /archlinux/scripts/secrets.fish
 
 for home in "/root" "/home/dinatamas"
     cp -rs /archlinux/config/ $home/.config/
-    ln -sf /archlinux/config/tmux $/home/.config/tmux	    
     pushd $home/.config/ &>> ./install.log
-    mkdir emacs.d; mkdir gnupg; mkdir X
+    mkdir gnupg
     popd &>> ./install.log
 end
 
