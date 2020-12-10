@@ -42,10 +42,10 @@ set -x LESSHISTFILE "$HOME/.config/lesshst"
 # Do NOT cache Python bytecode.
 set -x PYTHONDONTWRITEBYTECODE 1
 
-# Script aliases.
-alias battery "/archlinux/scripts/battery.fish"
-alias monitor "xrandr --auto"
-alias wifi    "systemctl start NetwokrManager"
+# Utility aliases.
+alias battery "cat /sys/class/power_supply/BAT0/capacity"
+alias monitor "xrandr --auto --output eDP-1 --left-of HDMI-1"
+alias wifi    "systemctl start NetworkManager"
 
 # Load my secrets. Keep this file safe!
 source /archlinux/scripts/secrets.fish
@@ -65,4 +65,5 @@ end
 if set -q TMUX
     source /usr/share/powerline/bindings/fish/powerline-setup.fish
     powerline-setup
+    set -x POWERLINE_CHAR " "
 end

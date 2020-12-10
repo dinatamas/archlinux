@@ -1,0 +1,11 @@
+{
+    "groups": {
+	"environment": { "fg": "nord0", "bg": "nord12", "attrs": [] },
+	"cwd": { "fg": "nord0", "bg": "nord14", "attrs": [] },
+	"cwd:current_folder": { "fg": "nord0", "bg": "nord6", "attrs": [] },
+	"cwd:divider": { "fg": "nord6", "bg": "nord6", "attrs": [] },
+	"branch": { "fg": "nord0", "bg": "nord3", "attrs": [] },
+	"branch_clean": { "fg": "nord0", "bg": "nord3", "attrs": [] },
+	"exit_fail": { "fg": "nord0", "bg": "nord1", "attrs": [] }
+    }
+}
