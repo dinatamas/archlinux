@@ -25,3 +25,7 @@
 (require 'xclip)
 (xclip-mode 1)
 (delete-selection-mode t)
+
+;; Keep cursor centered.
+(require 'centered-cursor-mode)
+(global-centered-cursor-mode 1)

@@ -202,8 +202,8 @@ exec_always --no-startup-id setxkbmap hu
 # Display resolution.
 exec_always --no-startup-id xrandr --auto --output eDP-1 --left-of HDMI-1
 
-# Set wallpaper.
-exec_always --no-startup-id feh --no-fehbg --bg-scale /archlinux/wallpapers/wallpaper
-
 # Run for transparency.
 exec_always --no-startup-id xcompmgr
+
+# Set wallpaper.
+exec_always --no-startup-id /archlinux/scripts/wallpaper.fish
