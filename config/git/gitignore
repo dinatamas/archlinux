@@ -9,5 +9,8 @@
 [._]ss[a-gi-z]
 [._]sw[a-p]
 
+# Python byte-compiled files.
+__pycache__/
+
 # Backups
 *.bak
