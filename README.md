@@ -23,6 +23,9 @@ __Run the install scripts__
 1. `./install1.sh`
 1. After executing the script, please reboot.
 
+Note: If you exit the script during execution, it will clean up after iself.
+Thus it can be safely run and restarted multiple times.
+
 __First run__
 1. `sudo pacman -Syu`.
 1. Emacs packages may need to be installed manually.

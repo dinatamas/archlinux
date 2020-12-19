@@ -56,26 +56,26 @@
 (global-hi-lock-mode t)
 
 ;; Define new highlight faces.
-(defface nordhl1
+(defface nordhl0
   '((t :foreground "white"
        :background "cyan")) "")
-(defface nordhl2
+(defface nordhl1
   '((t :foreground "white"
        :background "blue")) "")
-(defface nordhl3
+(defface nordhl2
   '((t :foreground "white"
        :background "green")) "")
-(defface nordhl4
+(defface nordhl3
   '((t :foreground "white"
        :background "magenta")) "")
-(defface nordhl5
+(defface nordhl4
   '((t :foreground "white"
        :background "red")) "")
 
 ; Set faces for highlighting.
 (setq hi-lock-face-defaults '(
-  "nordhl1" "nordhl2" "nordhl3"
-  "nordhl4" "nordhl5"))
+  "nordhl0" "nordhl1" "nordhl2"
+  "nordhl3" "nordhl4"))
 ; Do not prompt for selecting faces.
 (setq hi-lock-auto-select-face t)
 
