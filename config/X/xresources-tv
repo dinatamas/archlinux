@@ -1,0 +1,3 @@
+URxvt*font: xft:Source Code Pro Medium:size=12
+URxvt.internalBorder: 12
+Xft.dpi: 150

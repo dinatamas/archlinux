@@ -81,8 +81,8 @@ bindsym XF86AudioMute $exec pactl set-sink-mute 0 toggle # Mute sound.
 bindsym XF86AudioMicMute $exec pactl set-source-mute 0 toggle # Mute microphone.
 
 # Screen brightness controls.
-bindsym XF86MonBrightnessUp $exec xbacklight -inc 20 # Increase screen brightness
-bindsym XF86MonBrightnessDown $exec xbacklight -dec 20 # Decrease screen brightness
+bindsym XF86MonBrightnessUp $exec sudo xbacklight -inc 20 # Increase screen brightness
+bindsym XF86MonBrightnessDown $exec sudo xbacklight -dec 20 # Decrease screen brightness
 
 # Reload the configuration file.
 bindsym $mod+Shift+c reload

@@ -16,18 +16,27 @@ __Preparatory steps__
 1. Connect to the internet, using Wi-fi, Ethernet, USB tethering, etc.
 
 __Run the install scripts__
-1. `pacman -Sy git`
-1. `git clone https://github.com/dinatamas/archlinux.git`
+1. `pacman -Sy git`.
+1. `git clone https://github.com/dinatamas/archlinux.git`.
 1. Read through and customize the script.
 1. `cd archlinux`
 1. `./install1.sh`
 1. After executing the script, please reboot.
 
 __First run__
-1. `sudo pacman -Syu`
+1. `sudo pacman -Syu`.
+1. Emacs packages may need to be installed manually.
+1. Tmux packages may need to be installed manually.
 
 __Using the system__
-* Start GUI: `startx`
-* Start internet: `systemctl start NetworkManager`
-* Check battery status from CLI: `battery`
-* Live plug monitors: `monitor`
+* Start GUI: `startx`.
+* Start internet: `wifi`.
+* Configure networks: `nmtui`.
+  * Configured networks can be copied from `/etc/NetworkManager/system-connections/`.
+* Check battery status from CLI: `battery`.
+* Live plug monitors: `monitor`.
+* Live plug tv (HiDPI): `tv`.
+* Take screenshot: `flameshot`.
+* Change wallpaper: `wallpaper`.
+
+Further help can be found in the `cheatsheets` directory.

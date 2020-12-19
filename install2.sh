@@ -97,12 +97,12 @@ chown -R root:root /archlinux
 chmod -R 777 /archlinux
 chmod 700 /archlinux/scripts/secrets.fish
 
-for home in "/root" "/home/dinatamas"
+for home in "/root" "/home/dinatamas"; do
     cp -rs /archlinux/config/ $home/.config/
     pushd $home/.config/ &>> ./install.log
     mkdir gnupg
     popd &>> ./install.log
-end
+done
 
 echo_and_log "Configuring sudo..."
 ask_proceed
@@ -113,6 +113,20 @@ echo "dinatamas ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/dinatamas
 echo_and_log "Enabling color in pacman..."
 ask_proceed
 sed -i 's/#Color/Color/g' /etc/pacman.conf
+
+echo_and_log "Setting up SSH key..."
+ask_proceed
+ssh-keygen -q -t ed25519 -f "/home/dinatamas/.ssh/id_ed25519" -C "general" -N ""
+chmod 700 /home/dinatamas/.ssh
+touch /home/dinatamas/.ssh/authorized_keys
+chmod 644 /home/dinatamas/.ssh/authorized_keys
+touch /home/dinatamas/.ssh/known_hosts
+chmod 644 /home/dinatamas/.ssh/known_hosts
+touch /home/dinatamas/.ssh/config
+chmod 644 /home/dinatamas/.ssh/config
+chmod 600 /home/dinatamas/.ssh/id_ed25519
+chmod 644 /home/dinatamas/.ssh/id_ed25519.pub
+chown -R dinatamas:dinatamas /home/dinatamas/.ssh
 
 echo_and_log "Setting main shell to fish..."
 ask_proceed

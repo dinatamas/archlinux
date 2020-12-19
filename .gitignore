@@ -1,12 +1,12 @@
-# VIM stuff
-*.swp
-
-# Script files
+# Temp files during install.
 mirrorlist
 sda.dump
 
-# Secrets
+# Secrets.
 secrets.sh
 
-# Known shared configs.
+# Shared configs.
 config/tmux/plugins/
+
+# Generated configs.
+config/emacs/custom-file.el
