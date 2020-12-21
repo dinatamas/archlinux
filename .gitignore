@@ -3,7 +3,7 @@ mirrorlist
 sda.dump
 
 # Secrets.
-secrets.sh
+scripts/secrets.fish
 
 # Shared configs.
 config/tmux/plugins/
