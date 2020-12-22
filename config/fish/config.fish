@@ -53,12 +53,17 @@ alias startwifi "sudo systemctl start NetworkManager"
 function monitor
     xrandr --auto --dpi 96 --output eDP-1 --left-of HDMI-1
     xrdb -load /archlinux/config/X/xresources
+    setxkbmap hu
+    xmodmap /archlinux/config/X/xmodmap
+
 end
 
 function tv
     xrandr --auto --dpi 150 --output eDP-1 --left-of HDMI-1
     xrdb -load /archlinux/config/X/xresources
     xrdb -merge /archlinux/config/X/xresources-tv
+    setxkbmap hu
+    xmodmap /archlinux/config/X/xmodmap
 end
 
 # Change really ugly directory backgrounds for ls.
