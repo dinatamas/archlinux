@@ -199,6 +199,9 @@ gaps outer 30
 # Keyboard layout.
 exec_always --no-startup-id setxkbmap hu
 
+# Load keyboard modifications.
+exec_always --no-startup-id xmodmap /archlinux/config/X/xmodmap
+
 # Display resolution.
 exec_always --no-startup-id xrandr --auto --output eDP-1 --left-of HDMI-1
 

@@ -41,7 +41,7 @@
 (menu-bar-mode -1)
 
 ;; Highlight current line.
-(global-hl-line-mode t)
+;(global-hl-line-mode t)
 
 ;; Use system clipboard.
 (require 'xclip)
