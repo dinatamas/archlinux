@@ -11,9 +11,10 @@
 (load "/archlinux/config/emacs/powerline.el")
 
 ;; Set window width to 80 and center the buffer.
+
 (defun my-resize-margins ()
-  (if (> (frame-width) 100)
-    (let ((margin-size (/ (- (frame-width) 100) 2)))
+  (if (> (frame-width) 81)
+    (let ((margin-size (/ (- (frame-width) 81) 2)))
       (set-window-margins nil margin-size margin-size))))
 (add-hook 'window-configuration-change-hook #'my-resize-margins)
 (my-resize-margins)
@@ -55,7 +56,8 @@
 (xterm-mouse-mode 1)
 
 ;; Show matching parentheses.
-(show-paren-mode t)
+;; Disabled because it is too slow.
+;(show-paren-mode t)
 
 ;; Enable using 'y' or 'n' for prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)
