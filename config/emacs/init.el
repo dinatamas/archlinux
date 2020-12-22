@@ -12,8 +12,9 @@
 
 ;; Set window width to 80 and center the buffer.
 (defun my-resize-margins ()
-  (let ((margin-size (/ (- (frame-width) 100) 2)))
-    (set-window-margins nil margin-size margin-size)))
+  (if (> (frame-width) 100)
+    (let ((margin-size (/ (- (frame-width) 100) 2)))
+      (set-window-margins nil margin-size margin-size))))
 (add-hook 'window-configuration-change-hook #'my-resize-margins)
 (my-resize-margins)
 
