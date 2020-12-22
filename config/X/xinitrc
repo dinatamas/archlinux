@@ -6,4 +6,7 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=1
 # Merge the xresources file.
 xrdb -load /archlinux/config/X/xresources
 
+# Merge keyboard modifications.
+xmodmap /archlinux/config/X/xmodmap
+
 exec i3

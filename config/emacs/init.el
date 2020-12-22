@@ -10,6 +10,13 @@
 ;; Powerline as modeline with custom modifications.
 (load "/archlinux/config/emacs/powerline.el")
 
+;; Set window width to 80 and center the buffer.
+(defun my-resize-margins ()
+  (let ((margin-size (/ (- (frame-width) 100) 2)))
+    (set-window-margins nil margin-size margin-size)))
+(add-hook 'window-configuration-change-hook #'my-resize-margins)
+(my-resize-margins)
+
 ;; Load Nord theme.
 (add-to-list 'custom-theme-load-path (expand-file-name "~/.config/emacs.d/themes/"))
 (setq nord-region-highlight "snowstorm")

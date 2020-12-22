@@ -48,7 +48,7 @@ set -x PYTHONDONTWRITEBYTECODE 1
 # Utilities.
 alias battery   "cat /sys/class/power_supply/BAT0/capacity"
 alias wallpaper "/archlinux/scripts/wallpaper.fish"
-alias wifi      "sudo systemctl start NetworkManager"
+alias startwifi "sudo systemctl start NetworkManager"
 
 function monitor
     xrandr --auto --dpi 96 --output eDP-1 --left-of HDMI-1
