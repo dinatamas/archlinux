@@ -72,8 +72,7 @@ URxvt.scrollBar: false
 URxvt.scrollBar_right: false
 URxvt.urgentOnBell: true
 URxvt*depth: 32
-!URxvt*background: [85]nord0
-URxvt*background: [85]#000000
+URxvt*background: [85]nord0
 URxvt.iso14755: false
 
 !! Free M-s for Emacs.
