@@ -174,8 +174,8 @@ bar {
                 background $nord0
                 separator  $nord1
                 #                  border  background text
-                focused_workspace  $nord0  $nord0     $nord4
-                inactive_workspace $nord0  $nord0     $nord3
+                focused_workspace  $nord4  $nord4     $nord0
+                inactive_workspace $nord0  $nord0     $nord4
                 urgent_workspace   $nord11 $nord11    $nord4
         }
 }
