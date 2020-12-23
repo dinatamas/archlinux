@@ -11,7 +11,6 @@
 (load "/archlinux/config/emacs/powerline.el")
 
 ;; Set window width to 80 and center the buffer.
-
 (defun my-resize-margins ()
   (if (> (frame-width) 81)
     (let ((margin-size (/ (- (frame-width) 81) 2)))
@@ -41,6 +40,7 @@
 (menu-bar-mode -1)
 
 ;; Highlight current line.
+;; Disabled because of personal preference.
 ;(global-hl-line-mode t)
 
 ;; Use system clipboard.
@@ -114,3 +114,8 @@ t))
 (add-hook 'sh-mode-hook
   (lambda ()
     (sh-electric-here-document-mode -1)))
+
+;; Disable smart quotes.
+(defun never-smart-quote ()
+  (local-unset-key "\""))
+(add-hook 'latex-mode-hook 'never-smart-quote)

@@ -168,6 +168,7 @@ font pango:Source Code Pro Medium 11
 
 # Start i3status to display a workspace bar.
 bar {
+        separator_symbol " | "
         status_command i3status
         colors {
                 background $nord0

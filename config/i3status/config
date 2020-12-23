@@ -22,6 +22,7 @@ battery all {
         format = "%status %percentage"
 	status_chr = "▲"
 	status_bat = "▼"
+	status_full = "■"
 	low_threshold = 20
 }
 
@@ -36,5 +37,5 @@ memory {
 }
 
 tztime local {
-        format = "%a >> %m.%d. %H:%M"
+        format = "%a >> %m.%d. %H:%M "
 }
