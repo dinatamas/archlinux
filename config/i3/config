@@ -16,6 +16,7 @@ set $nord13 #EBCB8B
 set $nord14 #A3BE8C
 set $nord15 #B48EAD
 
+# Disable "Loading..." symbol.
 set $exec exec --no-startup-id
 set $exec_always exec_always --no-startup-id
 
@@ -183,20 +184,3 @@ bar {
 # Allow gaps.
 gaps inner 30
 gaps outer 30
-
-# ==============================================================================
-# Auto-start applications.
-# ==============================================================================
-
-# xrandr         -- Manages screens and resolutions.
-# xcompmgr       -- Allows transparency.
-# wallpaper.fish -- Sets wallpaper.
-# setxkbmap      -- Sets keyboard layout.
-# xmodmap        -- Loads keyboard modifications.
-
-$exec_always \
-  xrandr --auto --output eDP-1 --left-of HDMI-1; \
-  xcompmgr; \
-  /archlinux/scripts/wallpaper.fish; \
-  setxkbmap hu; \
-  xmodmap /archlinux/config/X/xmodmap
