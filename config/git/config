@@ -1,6 +1,6 @@
 [user]
-	name = dinatamaspal
-	email = 53911660+dinatamas@users.noreply.github.com
+        name = dinatamaspal
+        email = 53911660+dinatamas@users.noreply.github.com
 [core]
-	editor = emacs
-	excludesfile = /archlinux/config/git/gitignore
+        editor = emacs
+        excludesfile = /archlinux/config/git/gitignore

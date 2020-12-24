@@ -7,7 +7,7 @@ general {
 }
 
 order += "wireless _first_"
-order += "battery all"
+order += "battery 0"
 order += "cpu_temperature 0"
 order += "memory"
 order += "tztime local"
@@ -17,17 +17,19 @@ wireless _first_ {
         format_down = "W: down"
 }
 
-battery all {
-	last_full_capacity = true
+battery 0 {
+        last_full_capacity = true
+        integer_battery_capacity = true
         format = "%status %percentage"
-	status_chr = "▲"
-	status_bat = "▼"
-	status_full = "■"
-	low_threshold = 20
+        status_chr = "▲"
+        status_bat = "▼"
+        status_full = "■"
+        low_threshold = 20
+        path = "/sys/class/power_supply/BAT0/uevent"
 }
 
 cpu_temperature 0 {
-	format = "%degrees °C"
+        format = "%degrees °C"
 }
 
 memory {

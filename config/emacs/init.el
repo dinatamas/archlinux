@@ -10,6 +10,11 @@
 ;; Powerline as modeline with custom modifications.
 (load "/archlinux/config/emacs/powerline.el")
 
+;; Custom hi-lock related configuration (interactive highlighting).
+(require 'hi-lock)
+;(load "/archlinux/config/emacs/my-hi-lock.el")
+(load "/archlinux/config/emacs/highlight.el")
+
 ;; Set window width to 80 and center the buffer.
 (defun my-resize-margins ()
   (if (> (frame-width) 81)
@@ -62,53 +67,20 @@
 ;; Enable using 'y' or 'n' for prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Enable permanent highlights.
-(global-hi-lock-mode t)
+;; Define hook for line changes.
+;(defvar current-line-number (line-number-at-pos))
+;(defvar changed-line-hook nil)
+;(defun update-line-number ()
+;  (let ((new-line-number (line-number-at-pos)))
+;    (when (not (equal new-line-number current-line-number))
+;      (setq current-line-number new-line-number)
+;      (run-hooks 'changed-line-hook))))
+;(add-hook 'post-command-hook #'update-line-number)
 
-;; Define new highlight faces.
-(defface nordhl0
-  '((t :foreground "white"
-       :background "cyan")) "")
-(defface nordhl1
-  '((t :foreground "white"
-       :background "blue")) "")
-(defface nordhl2
-  '((t :foreground "white"
-       :background "green")) "")
-(defface nordhl3
-  '((t :foreground "white"
-       :background "magenta")) "")
-(defface nordhl4
-  '((t :foreground "white"
-       :background "red")) "")
-
-; Set faces for highlighting.
-(setq hi-lock-face-defaults '(
-  "nordhl0" "nordhl1" "nordhl2"
-  "nordhl3" "nordhl4"))
-; Do not prompt for selecting faces.
-(setq hi-lock-auto-select-face t)
-
-;; Highlight FIXME and TODO with red.
-(defface redhl
-  '((t :foreground "red")) "")
-(add-hook 'hi-lock-mode-hook
-  (lambda nil
-    (highlight-regexp "FIXME" 'redhl)
-    (highlight-regexp "TODO" 'redhl)
-    ; Skip the redhl face when highlighting.
-    (hi-lock-read-face-name)
-t))
-
-;; Make line hl-line work nicely with hi-lock.
-; Set low priority for the hl-line overlay.
-(defadvice hl-line-highlight (after set-priority activate)
-  (unless (window-minibuffer-p)
-    (overlay-put hl-line-overlay 'priority -50)))
-; Configure hl-lock to use overlays (by disabling font lock).
-(defadvice hi-lock-set-pattern (around use-overlays activate)
-  (let ((font-lock-mode nil))
-    ad-do-it))
+;; Quick utility to get current line length.
+(defun curr-line-len ()
+  (- (line-end-position)
+     (line-beginning-position)))
 
 ;; Disable auto here mode completion.
 (add-hook 'sh-mode-hook
@@ -119,3 +91,14 @@ t))
 (defun never-smart-quote ()
   (local-unset-key "\""))
 (add-hook 'latex-mode-hook 'never-smart-quote)
+
+;; Scroll half a page (screen).
+(defun window-half-height ()
+  (max 1 (/ (1- (window-height (selected-window))) 2)))
+(defun scroll-up-half ()
+  (scroll-up (window-half-height)))
+(defun scroll-down-half ()
+  (scroll-down (window-half-height)))
+
+;; Disable TAB indentation.
+(setq-default indent-tabs-mode nil)

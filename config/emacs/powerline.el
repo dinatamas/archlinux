@@ -52,8 +52,8 @@
     (when (stringp vc-mode)
       (setq vc-mode
         (propertize
-	  (replace-regexp-in-string "^." "" vc-mode)
-	  'face 'powerline-nord3)))))
+          (replace-regexp-in-string "^." "" vc-mode)
+          'face 'powerline-nord3)))))
 
 ;; Custom Powerline theme.
 ;; Don't differentiate active and inactive bars.
@@ -66,8 +66,8 @@
         (let* ((face0 'powerline-nord0)
                (face1 'powerline-nord1)
                (face2 'powerline-nord2)
-	       (face3 'powerline-nord3)
-	       (face4 'powerline-nord4)
+               (face3 'powerline-nord3)
+               (face4 'powerline-nord4)
                (separator-left (intern (format "powerline-%s-%s"
                                (powerline-current-separator)
                                (car powerline-default-separator-dir))))
@@ -75,31 +75,31 @@
                                (powerline-current-separator)
                                (cdr powerline-default-separator-dir))))
                (lhs (list (custom-buffer-id face0)
-			  (powerline-raw " " face0)
+                          (powerline-raw " " face0)
                           (funcall separator-left face0 face2)
-			  (funcall separator-left face2 face1)
+                          (funcall separator-left face2 face1)
                           (powerline-major-mode face1 'l)
                           (powerline-raw " " face1)
                           (funcall separator-left face1 face2)
                           (if vc-mode (funcall separator-left face2 face3))
                           (if vc-mode (powerline-vc face3))
                           (if vc-mode (powerline-raw " " face3))
-			  (if vc-mode (funcall separator-left face3 face2))))
+                          (if vc-mode (funcall separator-left face3 face2))))
                (rhs (list (funcall separator-right face2 face4)
                           (powerline-raw (char-to-string #xe0a1) face4 'l)
                           (powerline-raw " %0l" face4)
                           (powerline-raw ":" face4)
                           (powerline-raw "%0c " face4)
-			  (funcall separator-right face4 face2)
+                          (funcall separator-right face4 face2)
                           (funcall separator-right face2 face1)
-			  (powerline-raw " " face1)
+                          (powerline-raw " " face1)
                           (powerline-raw
-			   '(:eval (format "%d"
-			     (/ (- (line-number-at-pos) 1) 0.01
-				(count-lines (point-min) (point-max)))))
-			   face1)
-			  (powerline-raw "%%" face1)
-         		  (powerline-raw " " face1))))
+                           '(:eval (format "%d"
+                             (/ (- (line-number-at-pos) 1) 0.01
+                                (count-lines (point-min) (point-max)))))
+                           face1)
+                          (powerline-raw "%%" face1)
+                          (powerline-raw " " face1))))
                (concat (powerline-render lhs)
                        (powerline-fill face2 (powerline-width rhs))
                        (powerline-render rhs)))))))
