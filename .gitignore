@@ -5,7 +5,7 @@ sda.dump
 # Secrets.
 scripts/secrets.fish
 
-# Shared configs.
+# Plugins and software.
 config/tmux/plugins/
 
 # Generated configs.
