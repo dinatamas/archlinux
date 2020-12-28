@@ -39,5 +39,5 @@ memory {
 }
 
 tztime local {
-        format = "%a >> %m.%d. %H:%M "
+        format = "%a >> %m.%d. %H:%M  "
 }

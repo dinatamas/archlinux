@@ -9,3 +9,4 @@ end
 
 nitrogen --head=0 --set-scaled --force-setter=xinerama $WALLPAPER
 nitrogen --head=1 --set-scaled --force-setter=xinerama $WALLPAPER &>/dev/null
+echo $WALLPAPER
