@@ -11,9 +11,10 @@
 (load "/archlinux/config/emacs/powerline.el")
 
 ;; Custom hi-lock related configuration (interactive highlighting).
-(require 'hi-lock)
-;(load "/archlinux/config/emacs/my-hi-lock.el")
 (load "/archlinux/config/emacs/highlight.el")
+
+;; Load repetition error finder.
+(load "/archlinux/config/emacs/highlight-repeats.el")
 
 ;; Set window width to 80 and center the buffer.
 (defun my-resize-margins ()
@@ -102,3 +103,12 @@
 
 ;; Disable TAB indentation.
 (setq-default indent-tabs-mode nil)
+
+;; Auto-compile using pdflatex.
+(defun call-pdflatex ()
+  (interactive)
+  (save-window-excursion
+    (async-shell-command (concat "pdflatex " (buffer-file-name)))))
+(add-hook 'latex-mode-hook
+          (lambda ()
+            (add-hook 'after-save-hook 'call-pdflatex)))
