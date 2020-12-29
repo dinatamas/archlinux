@@ -1,4 +1,4 @@
-(setq context-size 100)
+(setq context-size 50)
 (setq min-repeats 2)
 (setq min-letters 4)
 
@@ -7,10 +7,8 @@
 (global-set-key (kbd "M-s r h") 'highlight-repeats)
 (global-set-key (kbd "M-s r u") 'unhighlight-repeats)
 
-(defun highlight-for-repeats (regexp face)
-  (let* ((no-matches t)
-         (search-start (point-min))
-         (search-end (point-max)))
+(defun highlight-for-repeats (regexp face search-start search-end)
+  (let* ((no-matches t))
     (save-excursion
       (goto-char search-start)
       (while (re-search-forward regexp search-end t)
@@ -32,7 +30,8 @@
   (dolist (rep repeats)
     (highlight-for-repeats
      (concat "\\<" rep "\\>")
-     (nth face-id repeat-hl-faces))
+     (nth face-id repeat-hl-faces)
+     begin end)
     (setq face-id (mod (1+ face-id) (length repeat-hl-faces)))))
 
 (defun unhighlight-repeats ()

@@ -7,8 +7,15 @@
 (setq custom-file "/archlinux/config/emacs/custom-file.el")
 (load-file custom-file)
 
-;; Powerline as modeline with custom modifications.
-(load "/archlinux/config/emacs/powerline.el")
+;; Nicer modeline and minibuffer.
+(load "/archlinux/config/emacs/mini-modeline.el")
+(mini-modeline-mode t)
+(setq mini-modeline-r-format '(:eval (concat
+  "%0l : %0c : "
+  (format "%d" (/ (- (line-number-at-pos) 1) 0.01
+                  (count-lines (point-min) (point-max))))
+  "%%")))
+(defun mini-modeline--set-buffer-face () ())
 
 ;; Custom hi-lock related configuration (interactive highlighting).
 (load "/archlinux/config/emacs/highlight.el")
@@ -16,18 +23,21 @@
 ;; Load repetition error finder.
 (load "/archlinux/config/emacs/highlight-repeats.el")
 
-;; Set window width to 80 and center the buffer.
-(defun my-resize-margins ()
-  (if (> (frame-width) 81)
-    (let ((margin-size (/ (- (frame-width) 81) 2)))
-      (set-window-margins nil margin-size margin-size))))
-(add-hook 'window-configuration-change-hook #'my-resize-margins)
-(my-resize-margins)
-
 ;; Load Nord theme.
 (add-to-list 'custom-theme-load-path (expand-file-name "~/.config/emacs.d/themes/"))
 (setq nord-region-highlight "snowstorm")
 (load-theme 'nord t)
+
+;; Set window width to 80 and center the buffer.
+(defun my-resize-margins ()
+  (if (> (frame-width) 81)
+    (let ((margin-size (/ (- (frame-width) 81) 2)))
+      (setq-default left-margin-width margin-size right-margin-width margin-size)
+      (set-window-margins (minibuffer-window) margin-size)
+      (set-window-buffer nil (current-buffer))
+      )))
+(add-hook 'window-configuration-change-hook #'my-resize-margins)
+(my-resize-margins)
 
 ;; Move all backups to separate folder.
 (setq backup-dir "~/.local/share/emacs-backups/")
@@ -48,6 +58,14 @@
 ;; Highlight current line.
 ;; Disabled because of personal preference.
 ;(global-hl-line-mode t)
+
+;; Recolor the echo area to match the Nord theme.
+;(dolist (buf '(" *Echo Area 0*" " *Echo Area 1*"))
+;  (with-current-buffer (get-buffer buf)
+;    (make-local-variable 'face-remapping-alist)
+;    (add-to-list 'face-remapping-alist
+;                 '(default (:background "black"
+;                            :foreground "white")))))
 
 ;; Use system clipboard.
 (require 'xclip)

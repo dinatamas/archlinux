@@ -40,6 +40,7 @@
 
 ;; My own highlighter.
 (defun my-highlight (regexp face &optional skip_curr)
+  (unless (window-minibuffer-p)
   (let* ((no-matches t)
          (range-min (- (point) (/ 2000000 2)))
          (range-max (+ (point) (/ 2000000 2)))
@@ -63,7 +64,7 @@
                (overlay-put overlay 'mine t)
                (overlay-put overlay 'face face))
                )
-             (goto-char (match-end 0))))))
+             (goto-char (match-end 0)))))))
 
 ;; Custom permanent highlights.
 (defface redfg
