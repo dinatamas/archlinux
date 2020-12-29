@@ -71,8 +71,11 @@ URxvt.saveline: 2048
 URxvt.scrollBar: false
 URxvt.scrollBar_right: false
 URxvt.urgentOnBell: true
-URxvt*depth: 32
-URxvt*background: [85]nord0
+!URxvt*depth: 32
+!URxvt*background: [70]black
+URxvt*transparent: true
+URxvt*shading: 30
+!URxvt*blurRadius: 15
 URxvt.iso14755: false
 
 !! Free M-s for Emacs.
