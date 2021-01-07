@@ -43,3 +43,17 @@ __Using the system__
 * Change wallpaper: `wallpaper`.
 
 Further help can be found in the `cheatsheets` directory.
+
+------------------------------
+
+Windows-copyrighted fonts:
+sudo mkdir /opt/aur_builds
+sudo cd /opt/aur_builds
+sudo git clone -n https://aur.archlinux.org/ttf-ms-win10.git
+cd ttf-ms-win10
+sudo git checkout 8e4be920594505a20dca5532cf6a2eb2cac1a17d
+The files were extracted legally. (See ArchLinux wiki for instructions.)
+They are placed under password protected encryption.
+The password is sourced from the secret file.
+
+Place the extracted archive to the /opt/aur_builds/ttf-ms-win10/ directory.
