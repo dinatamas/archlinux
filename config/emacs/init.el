@@ -13,7 +13,7 @@
 (setq mini-modeline-r-format '(:eval (concat
   "%0l : %0c : "
   (format "%d" (/ (- (line-number-at-pos) 1) 0.01
-                  (count-lines (point-min) (point-max))))
+                  (max (count-lines (point-min) (point-max)) 1)))
   "%%")))
 (defun mini-modeline--set-buffer-face () ())
 
@@ -79,9 +79,10 @@
 ;; Enable basic in-terminal mouse support.
 (xterm-mouse-mode 1)
 
-;; Show matching parentheses.
-;; Disabled because it is too slow.
-;(show-paren-mode t)
+;; Highlight mismatching parentheses.
+;(require 'paren)
+;(setq show-paren-style 'parenthesis)
+;(show-paren-mode +1)
 
 ;; Enable using 'y' or 'n' for prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)

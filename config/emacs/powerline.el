@@ -2,26 +2,21 @@
 (require 'powerline)
 
 ;; Define faces for nicer colors.
-(defface powerline-nord0
+(defface pl-nord0
   '((t :background "blue"
-       :foreground "black"
-       )) "")
-(defface powerline-nord1
+       :foreground "black")) "")
+(defface pl-nord1
   '((t :background "cyan"
-       :foreground "black"
-       )) "")
-(defface powerline-nord2
+       :foreground "black")) "")
+(defface pl-nord2
   '((t :background "black"
-       :foreground "white"
-       )) "")
-(defface powerline-nord3
+       :foreground "white")) "")
+(defface pl-nord3
   '((t :background "yellow"
-       :foreground "black"
-       )) "")
-(defface powerline-nord4
+       :foreground "black")) "")
+(defface pl-nord4
   '((t :background "brightblack"
-       :foreground "white"
-       )) "")
+       :foreground "white")) "")
 
 ;; Buffer id shouldn't be padded to at least 12 chars.
 (defun custom-buffer-id (&optional face pad)
@@ -53,56 +48,42 @@
       (setq vc-mode
         (propertize
           (replace-regexp-in-string "^." "" vc-mode)
-          'face 'powerline-nord3)))))
+          'face 'pl-nord3)))))
 
 ;; Custom Powerline theme.
 ;; Don't differentiate active and inactive bars.
 ;; Use custom segments and faces.
-(defun powerline-custom-theme () ""
-  (interactive)
-  (setq-default mode-line-format
-    '("%e"
-      (:eval
-        (let* ((face0 'powerline-nord0)
-               (face1 'powerline-nord1)
-               (face2 'powerline-nord2)
-               (face3 'powerline-nord3)
-               (face4 'powerline-nord4)
-               (separator-left (intern (format "powerline-%s-%s"
-                               (powerline-current-separator)
-                               (car powerline-default-separator-dir))))
-               (separator-right (intern (format "powerline-%s-%s"
-                               (powerline-current-separator)
-                               (cdr powerline-default-separator-dir))))
-               (lhs (list (custom-buffer-id face0)
-                          (powerline-raw " " face0)
-                          (funcall separator-left face0 face2)
-                          (funcall separator-left face2 face1)
-                          (powerline-major-mode face1 'l)
-                          (powerline-raw " " face1)
-                          (funcall separator-left face1 face2)
-                          (if vc-mode (funcall separator-left face2 face3))
-                          (if vc-mode (powerline-vc face3))
-                          (if vc-mode (powerline-raw " " face3))
-                          (if vc-mode (funcall separator-left face3 face2))))
-               (rhs (list (funcall separator-right face2 face4)
-                          (powerline-raw (char-to-string #xe0a1) face4 'l)
-                          (powerline-raw " %0l" face4)
-                          (powerline-raw ":" face4)
-                          (powerline-raw "%0c " face4)
-                          (funcall separator-right face4 face2)
-                          (funcall separator-right face2 face1)
-                          (powerline-raw " " face1)
-                          (powerline-raw
-                           '(:eval (format "%d"
-                             (/ (- (line-number-at-pos) 1) 0.01
-                                (count-lines (point-min) (point-max)))))
-                           face1)
-                          (powerline-raw "%%" face1)
-                          (powerline-raw " " face1))))
-               (concat (powerline-render lhs)
-                       (powerline-fill face2 (powerline-width rhs))
-                       (powerline-render rhs)))))))
-
-;; Apply theme.
-(powerline-custom-theme)
+(let* ((separator-left (intern (format "powerline-%s-%s"
+                       (powerline-current-separator)
+                       (car powerline-default-separator-dir))))
+       (separator-right (intern (format "powerline-%s-%s"
+                       (powerline-current-separator)
+                       (cdr powerline-default-separator-dir))))
+       (lhs (list (custom-buffer-id 'pl-nord0)
+                  (powerline-raw " " 'pl-nord0)
+                  (funcall separator-left 'pl-nord0 'pl-nord2)
+                  (funcall separator-left 'pl-nord2 'pl-nord1)
+                  (powerline-major-mode 'pl-nord1 'l)
+                  (powerline-raw " " 'pl-nord1)
+                  (funcall separator-left 'pl-nord1 'pl-nord2)
+                  (if vc-mode (funcall separator-left 'pl-nord2 'pl-nord3))
+                  (if vc-mode (powerline-vc 'pl-nord3))
+                  (if vc-mode (powerline-raw " " 'pl-nord3))
+                  (if vc-mode (funcall separator-left 'pl-nord3 'pl-nord2))))
+       (rhs (list (funcall separator-right 'pl-nord2 'pl-nord4)
+                  (powerline-raw (char-to-string #xe0a1) 'pl-nord4 'l)
+                  (powerline-raw " %0l" 'pl-nord4)
+                  (powerline-raw ":" 'pl-nord4)
+                  (powerline-raw "%0c " 'pl-nord4)
+                  (funcall separator-right 'pl-nord4 'pl-nord2)
+                  (funcall separator-right 'pl-nord2 'pl-nord1)
+                  (powerline-raw " " 'pl-nord1)
+                  (powerline-raw
+                   '(:eval (format "%d"
+                     (/ (- (line-number-at-pos) 1) 0.01
+                        (count-lines (point-min) (point-max)))))
+                   'pl-nord1)
+                  (powerline-raw "%%" 'pl-nord1)
+                  (powerline-raw " " 'pl-nord1))))
+       (setq modeline-powerline-lhs (powerline-render lhs))
+       (setq modeline-powerline-rhs (powerline-render rhs)))
