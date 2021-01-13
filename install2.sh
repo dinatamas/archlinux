@@ -76,6 +76,9 @@ grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB &>> .
 
 echo_and_log "Enabling Intel CPU microcode early loading..."
 ask_proceed
+echo "GRUB_FORCE_HIDDEN_MENU=\"true\"" >> /etc/default/grub
+cp 31_hold_shift /etc/grub.d/
+chmod a+x 31_hold_shift
 grub-mkconfig -o /boot/grub/grub.cfg &>> ./install.log
 
 echo_and_log "Creating a new user..."

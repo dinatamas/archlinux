@@ -16,6 +16,6 @@ setxkbmap hu
 xmodmap /archlinux/config/X/xmodmap
 
 # Set wallpaper.
-/archlinux/scripts/wallpaper.fish
+/archlinux/scripts/wallpaper.fish simple
 
 exec i3

@@ -41,6 +41,7 @@ __Using the system__
 * Live plug tv (HiDPI): `tv`.
 * Take screenshot: `flameshot`.
 * Change wallpaper: `wallpaper`.
+* Hold `shift` to open GRUB menu during bootup.
 
 Further help can be found in the `cheatsheets` directory.
 
