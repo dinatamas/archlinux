@@ -41,6 +41,7 @@ set -x EMACS_USER_DIRECTORY "$HOME/.config/emacs.d"
 set -x GNUPGHOME "$HOME/.local/gnupg"
 set -x XAUTHORITY "$HOME/.config/X/xauthority"
 set -x LESSHISTFILE "$HOME/.config/lesshst"
+set -x PYTHONSTARTUP "$HOME/.config/python/pythonrc"
 
 # Do NOT cache Python bytecode.
 set -x PYTHONDONTWRITEBYTECODE 1
