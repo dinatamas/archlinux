@@ -2,5 +2,5 @@
         name = dinatamaspal
         email = 53911660+dinatamas@users.noreply.github.com
 [core]
-        editor = emacs
+        editor = emacs -nw
         excludesfile = /archlinux/config/git/gitignore

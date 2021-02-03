@@ -24,9 +24,23 @@
 (load "/archlinux/config/emacs/highlight-repeats.el")
 
 ;; Load Nord theme.
-(add-to-list 'custom-theme-load-path (expand-file-name "~/.config/emacs.d/themes/"))
+(add-to-list 'custom-theme-load-path
+             (expand-file-name "~/.config/emacs.d/themes/"))
 (setq nord-region-highlight "snowstorm")
 (load-theme 'nord t)
+
+;; Transform temporary buffers to temporary windows.
+;(require 'popwin)
+;(popwin-mode 1)
+;(window-divider-mode)
+;; TODO: Popwin should be configured properly.
+;; TODO: Window dividers should be configured properly.
+
+;; Load directory tree viewer.
+(require 'direx)
+(global-set-key (kbd "C-x j") 'direx:jump-to-directory)
+(global-set-key (kbd "C-x p") 'direx-project:jump-to-project-root)
+(global-set-key (kbd "C-x f") 'direx:find-directory)
 
 ;; Set window width to 80 and center the buffer.
 (defun my-resize-margins ()
@@ -54,6 +68,9 @@
 
 ;; Disable menu bar.
 (menu-bar-mode -1)
+
+;; Kill buffers.
+(global-set-key (kbd "C-x k") 'kill-current-buffer)
 
 ;; Highlight current line.
 ;; Disabled because of personal preference.
@@ -113,21 +130,24 @@
 (add-hook 'latex-mode-hook 'never-smart-quote)
 
 ;; Scroll half a page (screen).
+;; TODO: Fix these.
 (defun window-half-height ()
   (max 1 (/ (1- (window-height (selected-window))) 2)))
-(defun scroll-up-half ()
+(defun scroll-up-half () (interactive)
   (scroll-up (window-half-height)))
-(defun scroll-down-half ()
+;(global-set-key (kbd "C-U") 'scroll-up-half)
+(defun scroll-down-half () (interactive)
   (scroll-down (window-half-height)))
+;(global-set-key (kbd "C-D") 'scroll-down-half)
 
 ;; Disable TAB indentation.
 (setq-default indent-tabs-mode nil)
 
-;; Auto-compile using pdflatex.
-(defun call-pdflatex ()
+;; Auto-compile using xelatex.
+(defun call-xelatex ()
   (interactive)
   (save-window-excursion
-    (async-shell-command (concat "pdflatex " (buffer-file-name)))))
+    (async-shell-command (concat "xelatex " (buffer-file-name)))))
 (add-hook 'latex-mode-hook
           (lambda ()
-            (add-hook 'after-save-hook 'call-pdflatex)))
+            (add-hook 'after-save-hook 'call-xelatex)))

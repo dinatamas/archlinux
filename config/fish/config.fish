@@ -13,6 +13,7 @@ alias tmux      "tmux -f /archlinux/config/tmux/tmux.conf"
 alias pdflatex  "pdflatex -halt-on-error"
 alias ping      "ping -c 2"
 alias startx    "startx /archlinux/config/X/xinitrc"
+alias xelatex   "xelatex -halt-on-error"
 
 # Mute less.
 set -x LESS "$LESS -R -Q"
@@ -72,7 +73,6 @@ source /archlinux/scripts/secrets.fish
 if [ "$TERM" = "linux" ]
    exit
 end
-
 
 # Auto-start tmux (if not already running).
 if not set -q TMUX
