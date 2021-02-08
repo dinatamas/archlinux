@@ -236,7 +236,7 @@ When ARG is:
   "Render the LEFT and RIGHT part of mini-modeline."
   (let* ((left (or left ""))
          (right (or right ""))
-         (available-width (max (- 84 ;(frame-width mini-modeline-frame)
+         (available-width (max (- (frame-width mini-modeline-frame) ; 84
                                   (string-width left)
                                   mini-modeline-right-padding)
                                0))

@@ -3,6 +3,21 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 
+;; Packages to install automatically.
+(setq package-list '(
+  xclip
+  centered-cursor-mode
+  dash-functional
+  nord-theme
+  direx))
+;; Fetch the list of packages available.
+(unless package-archive-contents
+  (package-refresh-contents))
+;; Install missing packages.
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
 ;; External include file for generated config.
 (setq custom-file "/archlinux/config/emacs/custom-file.el")
 (load-file custom-file)
@@ -42,15 +57,72 @@
 (global-set-key (kbd "C-x p") 'direx-project:jump-to-project-root)
 (global-set-key (kbd "C-x f") 'direx:find-directory)
 
-;; Set window width to 80 and center the buffer.
+;; Additional file creation utility for direx.
+(defun direx:create-file ()
+  (interactive)
+  (let* ((item (direx:item-at-point!))
+         (file (direx:item-tree item))
+         (parent-dir
+          (if (cl-typep file 'direx:directory)
+              (direx:file-full-name file)
+            (direx:directory-dirname
+             (direx:file-full-name file))))
+         (newfile (read-directory-name "Create file: " parent-dir)))
+    (when (file-exists-p dir)
+      (error "Can't create %s: file exists" newfile))
+    (if (not (file-exists-p (file-name-directory newfile)))
+        (make-directory (file-name-directory newfile) t))
+    (write-region "" nil newfile)
+    (direx:refresh-whole-tree)))
+(define-key direx:direx-mode-map (kbd "F") 'direx:create-file)
+
+;; Keep cursor centered.
+(require 'centered-cursor-mode)
+(global-centered-cursor-mode 1)
+
+;; Simplify the user interface.
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; Set buffer width to 80 and center the text.
+;; Calculate window width.
+;(defun nice-window-width (window)
+;  (let ((margins (window-margins window)))
+;    (+ (window-width window) (or (car margins) 0) (or (cdr margins) 0))))
+;(defun nice-window-change ()
+;  (dolist (window (window-list))
+;    (unless (window-minibuffer-p window)
+;      (let* ((target (with-selected-window window 84))
+;             (margin (and target (max (floor (/ (- (nice-window-width window)
+;                                            target) 2)) 0))))
+;        (set-window-margins window margin margin)))))
+;(defun clear-nice-window-margins ()
+;  (dolist (window (window-list))
+;    (set-window-margins window 0 0)))
+;(define-advice split-window (:before (&rest _))
+;  (set-window-margins (selected-window) 0 0))
+;(add-hook 'window-configuration-change-hook 'nice-window-change)
+;(add-hook 'window-size-change-functions 'nice-window-change)
+;(add-hook 'window-buffer-change-functions 'nice-window-change)
+;(add-hook 'window-setup-hook 'nice-window-change)
+
+;(defun my-resize-margins ()
+;  (if (> (window-width (window-main-window)) 85)
+;    (let ((margin-size (floor (/ (- (window-width (window-main-window)) 85) 2))))
+;      (set-window-margins (selected-window) margin-size margin-size))
+;    (set-window-margins (selected-window) 0 0)))
+
+(defun ideal-margin-size ()
+  (max (floor (/ (- (frame-width) 82) 2)) 0))
 (defun my-resize-margins ()
-  (if (> (frame-width) 81)
-    (let ((margin-size (/ (- (frame-width) 81) 2)))
-      (setq-default left-margin-width margin-size right-margin-width margin-size)
-      (set-window-margins (minibuffer-window) margin-size)
-      (set-window-buffer nil (current-buffer))
-      )))
-(add-hook 'window-configuration-change-hook #'my-resize-margins)
+  (interactive)
+  (set-window-margins (frame-root-window)
+                      (ideal-margin-size) (ideal-margin-size)))
+(add-hook 'window-configuration-change-hook 'my-resize-margins)
+(add-hook 'window-size-change-functions 'my-resize-margins)
+(add-hook 'window-buffer-change-functions 'my-resize-margins)
+(add-hook 'window-setup-hook 'my-resize-margins)
 (my-resize-margins)
 
 ;; Move all backups to separate folder.
@@ -66,53 +138,30 @@
       kept-new-versions 5
       kept-old-versions 2)
 
-;; Disable menu bar.
-(menu-bar-mode -1)
-
-;; Kill buffers.
+;; Kill buffers with simple key combination.
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
+;; Always ask when exiting emacs. Prefer to kill individual buffers.
+(setq confirm-kill-emacs 'y-or-n-p)
+;; Enable using 'y' or 'n' for prompts in general.
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Highlight current line.
 ;; Disabled because of personal preference.
 ;(global-hl-line-mode t)
-
-;; Recolor the echo area to match the Nord theme.
-;(dolist (buf '(" *Echo Area 0*" " *Echo Area 1*"))
-;  (with-current-buffer (get-buffer buf)
-;    (make-local-variable 'face-remapping-alist)
-;    (add-to-list 'face-remapping-alist
-;                 '(default (:background "black"
-;                            :foreground "white")))))
 
 ;; Use system clipboard.
 (require 'xclip)
 (xclip-mode 1)
 (delete-selection-mode t)
 
-;; Keep cursor centered.
-(require 'centered-cursor-mode)
-(global-centered-cursor-mode 1)
-
 ;; Enable basic in-terminal mouse support.
 (xterm-mouse-mode 1)
 
 ;; Highlight mismatching parentheses.
+;; Disabled due to performance reasons.
 ;(require 'paren)
 ;(setq show-paren-style 'parenthesis)
 ;(show-paren-mode +1)
-
-;; Enable using 'y' or 'n' for prompts.
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; Define hook for line changes.
-;(defvar current-line-number (line-number-at-pos))
-;(defvar changed-line-hook nil)
-;(defun update-line-number ()
-;  (let ((new-line-number (line-number-at-pos)))
-;    (when (not (equal new-line-number current-line-number))
-;      (setq current-line-number new-line-number)
-;      (run-hooks 'changed-line-hook))))
-;(add-hook 'post-command-hook #'update-line-number)
 
 ;; Quick utility to get current line length.
 (defun curr-line-len ()
