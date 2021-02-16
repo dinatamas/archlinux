@@ -1,4 +1,5 @@
 #!/usr/bin/env fish
+# TODO: Add help message.
 
 switch (count $argv)
 case 0

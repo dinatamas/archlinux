@@ -1,7 +1,14 @@
 #!/bin/bash
-
+#
+# This is the first installation script.
+# Start this script in the initial archlinux virtual console.
+#
+# For details visit:
+# https://wiki.archlinux.org/index.php/Installation_guide
+#
 function ask_proceed {
     read -s -p "Press Enter to proceed, Ctrl+C to abort..." _
+    # This will clear the previously printed prompt line.
     echo -en "\033[2K"; printf "\r"
 }
 
@@ -18,7 +25,7 @@ fi
 
 echo_and_log "Logging to ./install.log..."
 ask_proceed
-> ./install.log
+> ./install.log  # Empty the log file.
 
 echo_and_log "Verifying that the computer has network connectivity..."
 ask_proceed
@@ -76,7 +83,7 @@ mv ./mirrorlist /etc/pacman.d/mirrorlist &>> ./install.log
 
 echo_and_log "Installing packages..."
 ask_proceed
-packagelist="acpilight alsa-utils atom"
+packagelist="  acpilight alsa-utils atom"
 packagelist+=" base base-devel bzip2"
 packagelist+=" cronie curl"
 packagelist+=" diffutils docker"

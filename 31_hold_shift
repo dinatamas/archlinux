@@ -1,5 +1,14 @@
-#! /bin/sh
-# See: https://wiki.archlinux.org/index.php/GRUB/Tips_and_tricks#Hide_GRUB_unless_the_Shift_key_is_held_down
+#!/bin/sh
+#
+# This script improves the default GRUB behaviour installed with Arch Linux.
+#
+# Instead of having to select the OS or wait for timeout at each boot,
+# by using this script it is possible to simply enter the OS except
+# when the shift key is held down during the boot process.
+#
+# For more details visit:
+# https://wiki.archlinux.org/index.php/GRUB/Tips_and_tricks
+#
 set -e
 
 prefix="/usr"
@@ -13,7 +22,6 @@ source "${datarootdir}/grub/grub-mkconfig_lib"
 found_other_os=
 
 make_timeout () {
-
   if [ "x${GRUB_FORCE_HIDDEN_MENU}" = "xtrue" ] ; then
     if [ "x${1}" != "x" ] ; then
       if [ "x${GRUB_HIDDEN_TIMEOUT_QUIET}" = "xtrue" ] ; then
@@ -23,7 +31,7 @@ make_timeout () {
       fi
 
       if [ "x${1}" = "x0" ] ; then
-    cat <<EOF
+    cat << EOF
 if [ "x\${timeout}" != "x-1" ]; then
   if keystatus; then
     if keystatus --shift; then
@@ -53,7 +61,7 @@ EOF
 
 adjust_timeout () {
   if [ "x$GRUB_BUTTON_CMOS_ADDRESS" != "x" ]; then
-    cat <<EOF
+    cat << EOF
 if cmostest $GRUB_BUTTON_CMOS_ADDRESS ; then
 EOF
     make_timeout "${GRUB_HIDDEN_TIMEOUT_BUTTON}" "${GRUB_TIMEOUT_BUTTON}"
@@ -67,7 +75,7 @@ EOF
 
   adjust_timeout
 
-    cat <<EOF
+    cat << EOF
 if [ "x\${timeout}" != "x-1" ]; then
   if keystatus; then
     if keystatus --shift; then

@@ -5,11 +5,12 @@
 
 ;; Packages to install automatically.
 (setq package-list '(
-  xclip
   centered-cursor-mode
   dash-functional
+  direx
+  multiple-cursors
   nord-theme
-  direx))
+  xclip))
 ;; Fetch the list of packages available.
 (unless package-archive-contents
   (package-refresh-contents))
@@ -38,11 +39,20 @@
 ;; Load repetition error finder.
 (load "/archlinux/config/emacs/highlight-repeats.el")
 
+;; No startup/title screen.
+(setq-default inhibit-startup-screen t)
+(setq inhibit-splash-screen t)
+(setq inhibit-startup-message t)
+(setq initial-scratch-message "")
+(setq initial-major-mode 'fundamental-mode)
+
 ;; Load Nord theme.
 (add-to-list 'custom-theme-load-path
              (expand-file-name "~/.config/emacs.d/themes/"))
 (setq nord-region-highlight "snowstorm")
 (load-theme 'nord t)
+;; All the nice colors (256 Xterm):
+; https://jonasjacek.github.io/colors/
 
 ;; Transform temporary buffers to temporary windows.
 ;(require 'popwin)
@@ -68,7 +78,7 @@
             (direx:directory-dirname
              (direx:file-full-name file))))
          (newfile (read-directory-name "Create file: " parent-dir)))
-    (when (file-exists-p dir)
+    (when (file-exists-p newfile)
       (error "Can't create %s: file exists" newfile))
     (if (not (file-exists-p (file-name-directory newfile)))
         (make-directory (file-name-directory newfile) t))
@@ -149,6 +159,9 @@
 ;; Disabled because of personal preference.
 ;(global-hl-line-mode t)
 
+;; Disable the Insert button (overwrite mode).
+(global-set-key (kbd "<insertchar>") nil)
+
 ;; Use system clipboard.
 (require 'xclip)
 (xclip-mode 1)
@@ -156,6 +169,32 @@
 
 ;; Enable basic in-terminal mouse support.
 (xterm-mouse-mode 1)
+
+;; Multiple cursors.
+(require 'multiple-cursors)
+;; Set multiple fake cursors then enter multicursor mode.
+(defun mc/toggle-cursor-at-point ()
+  (interactive)
+  (if multiple-cursors-mode
+      (message (concat "Cannot toggle cursor at point "
+                       "while `multiple-cursors-mode' is active."))
+    (let ((existing (mc/fake-cursor-at-point)))
+      (if existing
+          (mc/remove-fake-cursor existing)
+        (mc/create-fake-cursor-at-point)))))
+(add-to-list 'mc/cmds-to-run-once 'mc/toggle-cursor-at-point)
+(add-to-list 'mc/cmds-to-run-once 'multiple-cursors-mode)
+(global-unset-key (kbd "C-x m"))
+(global-set-key (kbd "C-x m c") 'mc/toggle-cursor-at-point)
+(global-set-key (kbd "C-x m RET") 'multiple-cursors-mode)
+(global-set-key (kbd "C-x m r") 'mc/edit-lines)
+;; So that hitting enter doesn't quit multicursor mode,
+;; just inserts a newline character.
+(define-key mc/keymap (kbd "RET") nil)
+
+;; Ignore case when searching by default.
+(setq case-fold-search t)
+(setq case-replace t)
 
 ;; Highlight mismatching parentheses.
 ;; Disabled due to performance reasons.
@@ -179,18 +218,38 @@
 (add-hook 'latex-mode-hook 'never-smart-quote)
 
 ;; Scroll half a page (screen).
-;; TODO: Fix these.
 (defun window-half-height ()
   (max 1 (/ (1- (window-height (selected-window))) 2)))
 (defun scroll-up-half () (interactive)
-  (scroll-up (window-half-height)))
-;(global-set-key (kbd "C-U") 'scroll-up-half)
+  (forward-line (window-half-height)))
+(global-set-key (kbd "C-U") 'scroll-up-half)
 (defun scroll-down-half () (interactive)
-  (scroll-down (window-half-height)))
-;(global-set-key (kbd "C-D") 'scroll-down-half)
+  (forward-line (* (window-half-height) -1)))
+(global-set-key (kbd "C-D") 'scroll-down-half)
 
 ;; Disable TAB indentation.
 (setq-default indent-tabs-mode nil)
+
+;; Use a better word skip function.
+;; This skips words but stops around symbols.
+(defun improved-forward (&optional arg)
+  (interactive "^p")
+  (if (> arg 0)
+      (dotimes (_ arg)
+        (when (looking-at-p "[ \t]")
+          (skip-chars-forward " \t"))
+        (unless (= (point) (point-max))
+          (forward-same-syntax)))
+    (dotimes (_ (- arg))
+      (when (looking-back "[ \t]")
+        (skip-chars-backward " \t"))
+      (unless (= (point) (point-min))
+        (forward-same-syntax -1)))))
+(defun improved-backward (&optional arg)
+  (interactive "^p")
+  (improved-forward (- arg)))
+(global-set-key (kbd "M-f") 'improved-forward)
+(global-set-key (kbd "M-b") 'improved-backward)
 
 ;; Auto-compile using xelatex.
 (defun call-xelatex ()

@@ -6,7 +6,7 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=1
 # Merge the xresources file.
 xrdb -load /archlinux/config/X/xresources
 
-# Start composite manager.
+# Start the compositor (for blurring, opacity).
 xcompmgr &
 
 # Set keyboard layout.

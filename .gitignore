@@ -1,11 +1,13 @@
-# Temp files during install.
+# Temporary files during installation.
 mirrorlist
 sda.dump
 
 # Secrets.
+# Handle these manually when installing!
 scripts/secrets.fish
+ssh/
 
-# Plugins and software.
+# Plugins and packages.
 config/tmux/plugins/
 
 # Generated configs.

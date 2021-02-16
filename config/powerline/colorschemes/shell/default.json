@@ -6,6 +6,9 @@
         "cwd:divider": { "fg": "nord6", "bg": "nord6", "attrs": [] },
         "branch": { "fg": "nord0", "bg": "nord3", "attrs": [] },
         "branch_clean": { "fg": "nord0", "bg": "nord3", "attrs": [] },
-        "exit_fail": { "fg": "nord0", "bg": "nord1", "attrs": [] }
+        "branch_dirty": { "fg": "nord0", "bg": "nord3", "attrs": [] },
+        "exit_fail": { "fg": "nord0", "bg": "nord1", "attrs": [] },
+        "jobnum": { "fg": "nord0", "bg": "nord5", "attrs": [] },
+        "stash": { "fg": "nord3", "bg": "nord8", "attrs": [] }
     }
 }

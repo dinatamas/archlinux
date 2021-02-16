@@ -12,5 +12,5 @@
 # Python byte-compiled files.
 __pycache__/
 
-# Backups
+# Manual file backups.
 *.bak

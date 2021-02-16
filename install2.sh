@@ -1,7 +1,14 @@
 #!/bin/bash
-
+#
+# This is the second phase of the installation.
+# It is run within a chroot system on the new installation.
+#
+# For more details visit:
+# https://wiki.archlinux.org/index.php/Installation_guide
+#
 function ask_proceed {
     read -s -p "Press Enter to proceed, Ctrl+C to abort..." _
+    # This will clear the previously printed prompt line.
     echo -en "\033[2K"; printf "\r"
 }
 
@@ -58,21 +65,27 @@ echo_and_log "Setting root password..."
 ask_proceed
 passwd
 
+# Important: The following step may be unnecessary for most computers.
 echo_and_log "Fixing wifi issues..."
 ask_proceed
 echo "options rtw88_pci disable_aspm=1" > /etc/modprobe.d/rtw88_pci.conf
 echo "options rtw88_core lps_deep_mode=0" > /etc/modprobe.d/rtw88_core.conf
 
-echo_and_log "Copying over network configuration..."
-ask_proceed
-cp ./network/systemd/*.network /etc/systemd/network/
-cp ./network/systemd/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+# TODO: Use the new NetworkManager configuration!
+# Source: /etc/NetworkManager/system-connections/
+#echo_and_log "Copying over network configuration..."
+#ask_proceed
+#cp ./network/systemd/*.network /etc/systemd/network/
+#cp ./network/systemd/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 echo_and_log "Installing the GRUB boot loader..."
 ask_proceed
 mkdir /efi &>> ./install.log
 mount /dev/sda1 /efi &>> ./install.log
-grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB &>> ./install.log
+grub-install \
+    --target=x86_64-efi \
+    --efi-directory=/efi \
+    --bootloader-id=GRUB &>> ./install.log
 
 echo_and_log "Enabling Intel CPU microcode early loading..."
 ask_proceed
@@ -82,25 +95,21 @@ chmod a+x 31_hold_shift
 grub-mkconfig -o /boot/grub/grub.cfg &>> ./install.log
 
 echo_and_log "Creating a new user..."
-ask_proceed
-mkdir /home/dinatamas &>> ./install.log
-useradd dinatamas &>> ./install.log
+read -p "Please provide the username: " user
+mkdir /home/$user &>> ./install.log
+useradd $user &>> ./install.log
 
 echo_and_log "Setting the password for new user..."
 ask_proceed
-passwd dinatamas
+passwd $user
 
-echo_and_log "Fixing wifi issues..."
-echo "options rtw88_pci disable_aspm=1" > /etc/modprobe.d/rtw88_pci.conf
-echo "options rtw88_core lps_deep_mode=0" > /etc/modprobe.d/rtw88_core.conf
-
+# TODO: Better permissions for the files!
 echo_and_log "Copying configuration files..."
 ask_proceed
 chown -R root:root /archlinux
 chmod -R 777 /archlinux
 chmod 700 /archlinux/scripts/secrets.fish
-
-for home in "/root" "/home/dinatamas"; do
+for home in "/root" "/home/$user"; do
     cp -rs /archlinux/config/ $home/.config/
     pushd $home/.config/ &>> ./install.log
     mkdir gnupg
@@ -110,30 +119,37 @@ done
 echo_and_log "Configuring sudo..."
 ask_proceed
 groupadd sudo &>> ./install.log
-usermod -aG sudo dinatamas &>> ./install.log
-echo "dinatamas ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/dinatamas
+usermod -aG sudo $user &>> ./install.log
+echo "$user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$user
 
 echo_and_log "Enabling color in pacman..."
 ask_proceed
 sed -i 's/#Color/Color/g' /etc/pacman.conf
 
-echo_and_log "Setting up SSH key..."
-ask_proceed
-ssh-keygen -q -t ed25519 -f "/home/dinatamas/.ssh/id_ed25519" -C "general" -N ""
-chmod 700 /home/dinatamas/.ssh
-touch /home/dinatamas/.ssh/authorized_keys
-chmod 644 /home/dinatamas/.ssh/authorized_keys
-touch /home/dinatamas/.ssh/known_hosts
-chmod 644 /home/dinatamas/.ssh/known_hosts
-touch /home/dinatamas/.ssh/config
-chmod 644 /home/dinatamas/.ssh/config
-chmod 600 /home/dinatamas/.ssh/id_ed25519
-chmod 644 /home/dinatamas/.ssh/id_ed25519.pub
-chown -R dinatamas:dinatamas /home/dinatamas/.ssh
+# TODO: Use stored (secret) SSH configuration.
+#echo_and_log "Setting up SSH key..."
+#ask_proceed
+#ssh-keygen -q -t ed25519 -f "/home/dinatamas/.ssh/id_ed25519" -C "general" -N ""
+#chmod 700 /home/dinatamas/.ssh
+#touch /home/dinatamas/.ssh/authorized_keys
+#chmod 644 /home/dinatamas/.ssh/authorized_keys
+#touch /home/dinatamas/.ssh/known_hosts
+#chmod 644 /home/dinatamas/.ssh/known_hosts
+#touch /home/dinatamas/.ssh/config
+#chmod 644 /home/dinatamas/.ssh/config
+#chmod 600 /home/dinatamas/.ssh/id_ed25519
+#chmod 644 /home/dinatamas/.ssh/id_ed25519.pub
+#chown -R dinatamas:dinatamas /home/dinatamas/.ssh
 
 echo_and_log "Setting main shell to fish..."
 ask_proceed
-sudo dinatamas chsh -s `which fish` &>> ./install.log
+sudo $user chsh -s `which fish` &>> ./install.log
 
 echo_and_log "Installing tmux package manager..."
+ask_proceed
 git clone https://github.com/tmux-plugins/tpm /archlinux/config/tmux/plugins/tpm
+# TODO: Call the tmux plugin installation scripts.
+
+echo_and_log "Enabling the powerline-daemon service"
+ask_proceed
+systemctl --user enable powerline-daemon.service
