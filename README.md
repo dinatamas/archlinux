@@ -28,7 +28,8 @@ __Run the install scripts__
 1. At first run: `sudo pacman -Syu`
 
 Note: If you exit the script during execution, just re-execute `install1.sh`.
-# TODO: Highlight where things may need to be changed in the scripts / configs.
+
+TODO: Highlight where things may need to be changed in the scripts / configs.
 
 __Using the system__
 * Start GUI: `startgui`
