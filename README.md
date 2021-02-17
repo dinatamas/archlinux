@@ -78,6 +78,8 @@ TODO: Add a cheatsheets directory.
 * anzu package for highlighting
 * ioah86/repetition_error_finder
 * Bret Victor: Inventing on Principle
+* github snakedye wlr_config wallpapers
+* hashtagsaurav dotfiles
 
 ------------------------------
 
