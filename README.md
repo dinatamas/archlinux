@@ -6,6 +6,9 @@
 
 These are my notes and scripts for setting up my Arch Linux workstation.
 
+![Console environment](/img/console_screenshot.png)
+![Development environment](/img/work_screenshot.png)
+
 ## Usage
 
 __Preparatory steps__
