@@ -46,6 +46,10 @@
 (setq initial-scratch-message "")
 (setq initial-major-mode 'fundamental-mode)
 
+;; No Messages buffer.
+(setq-default message-log-max nil)
+(kill-buffer "*Messages*")
+
 ;; Load Nord theme.
 (add-to-list 'custom-theme-load-path
              (expand-file-name "~/.config/emacs.d/themes/"))
